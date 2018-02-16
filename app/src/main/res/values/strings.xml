@@ -1,3 +1,12 @@
 <resources>
     <string name="app_name">Draw4Friends</string>
+
+    <string name="login">Login</string>
+    <string name="register">Register</string>
+    <string name="email">Enter mail address</string>
+    <string name="pw">Enter password</string>
+    <string name="confirm_pw">Confirm password</string>
+    <string name="no_account"><u>No account? Register now!</u></string>
+
+
 </resources>
