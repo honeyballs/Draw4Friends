@@ -13,6 +13,7 @@
         android:layout_marginTop="80dp"
         android:layout_marginBottom="20dp"
         android:textColor="#fff"
+        android:id="@+id/loginHeadline"
         />
 
     <LinearLayout
@@ -32,10 +33,10 @@
             android:layout_width="0dp"
             android:layout_weight="1"
             android:layout_height="wrap_content"
-            android:hint="@string/email"
+            android:hint="@string/username"
             android:id="@+id/loginEmailEditText"
             android:layout_gravity="center_vertical"
-            android:inputType="textEmailAddress"
+            android:inputType="textPersonName"
             android:layout_marginLeft="10dp"
             android:layout_marginRight="20dp"
             android:textColor="#fff"
