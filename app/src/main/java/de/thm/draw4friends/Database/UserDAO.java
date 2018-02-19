@@ -36,6 +36,9 @@ public interface UserDAO {
     @Query("SELECT uId, username FROM users")
     public List<User> getUsers();
 
+    @Query("SELECT uId, username FROM users WHERE uId LIKE :uId")
+    public User getUserById(int uId);
+
     @Query("SELECT uId, username FROM users WHERE username LIKE :username")
     public User findUser(String username);
 

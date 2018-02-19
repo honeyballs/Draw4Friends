@@ -1,5 +1,6 @@
 <resources>
     <string name="app_name">Draw4Friends</string>
+    <string name="friends">Friends</string>
 
     <string name="login">Login</string>
     <string name="register">Register</string>
@@ -7,6 +8,15 @@
     <string name="pw">Enter password</string>
     <string name="confirm_pw">Confirm password</string>
     <string name="no_account"><u>No account? Register now!</u></string>
+    <string name="register_failed">Failed to register. Your username may have been taken already.</string>
+    <string name="login_failed">Failed to login. Please check for typos.</string>
+    <string name="logout">Logout</string>
+    <string name="confirm_logout">Are you sure you want to logout?</string>
+    <string name="ok">Ok</string>
+    <string name="cancel">Cancel</string>
 
+    <!-- Keys -->
+    <string name="login_token">token</string>
+    <string name="user_obj">user_obj</string>
 
 </resources>
