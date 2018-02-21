@@ -137,6 +137,12 @@ public class LoginActivity extends AppCompatActivity {
             String pw = strings[1];
             Database db = Database.getDatabaseInstance(LoginActivity.this);
             User user = db.userDAO().loginWithInfo(username, pw);
+            if (user != null) {
+                SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(LoginActivity.this);
+                SharedPreferences.Editor editor = prefs.edit();
+                editor.putString(getString(R.string.login_token), user.getToken());
+                editor.apply();
+            }
             return user;
         }
 

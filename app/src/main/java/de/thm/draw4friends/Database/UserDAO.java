@@ -27,7 +27,7 @@ public interface UserDAO {
     @Delete
     public int deleteUser(User user);
 
-    @Query("SELECT uId, username FROM users WHERE username LIKE :username AND password LIKE :password")
+    @Query("SELECT uId, username, token FROM users WHERE username LIKE :username AND password LIKE :password")
     public User loginWithInfo(String username, String password);
 
     @Query("SELECT uId, username FROM users WHERE token LIKE :token")

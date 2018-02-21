@@ -33,6 +33,7 @@ public class HomeActivity extends AppCompatActivity {
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         Bundle bundle = getIntent().getExtras();
         if (bundle != null) {
@@ -53,6 +54,9 @@ public class HomeActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.friends_menu:
+                Intent intent = new Intent(this, FriendlistActivity.class);
+                intent.putExtra(getString(R.string.user_obj), user);
+                startActivity(intent);
                 return true;
             case R.id.logout_menu:
                 logoutDialog();
