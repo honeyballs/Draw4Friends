@@ -22,5 +22,6 @@
     <!-- Keys -->
     <string name="login_token">token</string>
     <string name="user_obj">user_obj</string>
+    <string name="friend">Search for name of a friend</string>
 
 </resources>
