@@ -3,6 +3,7 @@ package de.thm.draw4friends.Home;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
@@ -13,9 +14,17 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.widget.Adapter;
+import android.widget.Button;
+import android.widget.ListView;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import de.thm.draw4friends.Database.Database;
 import de.thm.draw4friends.Friendlist.FriendlistActivity;
 import de.thm.draw4friends.Login.LoginActivity;
+import de.thm.draw4friends.Model.Challenge;
 import de.thm.draw4friends.Model.User;
 import de.thm.draw4friends.R;
 
@@ -27,6 +36,10 @@ import de.thm.draw4friends.R;
 public class HomeActivity extends AppCompatActivity {
 
     private User user;
+    private ChallengeAdapter adapter;
+
+    private Button startChallengeButton;
+    private ListView challengeListView;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -36,13 +49,17 @@ public class HomeActivity extends AppCompatActivity {
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         Bundle bundle = getIntent().getExtras();
         if (bundle != null) {
             user = bundle.getParcelable(getString(R.string.user_obj));
             Log.e("USER: ", user.getUsername());
         }
+
+        this.startChallengeButton = findViewById(R.id.startChallengeButton);
+        this.challengeListView = findViewById(R.id.challengeList);
+        adapter = new ChallengeAdapter(this, new ArrayList<Challenge>(), user.getUId());
+        this.challengeListView.setAdapter(adapter);
 
     }
 
@@ -69,6 +86,12 @@ public class HomeActivity extends AppCompatActivity {
         }
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        new getChallengesTask().execute(user.getUId());
+    }
+
     private void logoutDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle(getString(R.string.logout));
@@ -93,4 +116,23 @@ public class HomeActivity extends AppCompatActivity {
         });
         builder.create().show();
     }
+
+    class getChallengesTask extends AsyncTask<Integer, Void, List<Challenge>> {
+
+        @Override
+        protected List<Challenge> doInBackground(Integer... integers) {
+            List<Challenge> challenges = null;
+            Database db = Database.getDatabaseInstance(HomeActivity.this);
+            challenges = db.challengeDAO().getChallengesForPlayer(integers[0]);
+            return challenges;
+        }
+
+        @Override
+        protected void onPostExecute(List<Challenge> challenges) {
+            if (challenges != null) {
+                adapter.addAll(challenges);
+            }
+        }
+    }
+
 }

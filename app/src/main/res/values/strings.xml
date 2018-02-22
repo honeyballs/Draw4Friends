@@ -14,6 +14,10 @@
     <string name="confirm_logout">Are you sure you want to logout?</string>
     <string name="ok">Ok</string>
     <string name="cancel">Cancel</string>
+    <string name="challenge_friend">Challenge a friend!</string>
+    <string name="active_challenges">Active challenges</string>
+    <string name="turn_draw">It\'s your turn to <b>draw</b>.</string>
+    <string name="turn_guess">It\'s your turn to <b>guess</b>.</string>
 
     <!-- Keys -->
     <string name="login_token">token</string>
