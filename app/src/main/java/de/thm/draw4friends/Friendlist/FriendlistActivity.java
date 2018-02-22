@@ -1,4 +1,4 @@
-package de.thm.draw4friends;
+package de.thm.draw4friends.Friendlist;
 
 import android.support.v7.app.AppCompatActivity;
 

@@ -1,4 +1,4 @@
-package de.thm.draw4friends;
+package de.thm.draw4friends.Login;
 
 import java.util.UUID;
 

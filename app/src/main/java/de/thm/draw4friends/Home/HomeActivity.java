@@ -1,4 +1,4 @@
-package de.thm.draw4friends;
+package de.thm.draw4friends.Home;
 
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -14,7 +14,10 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 
+import de.thm.draw4friends.Friendlist.FriendlistActivity;
+import de.thm.draw4friends.Login.LoginActivity;
 import de.thm.draw4friends.Model.User;
+import de.thm.draw4friends.R;
 
 
 /**

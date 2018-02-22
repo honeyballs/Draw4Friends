@@ -1,4 +1,4 @@
-package de.thm.draw4friends;
+package de.thm.draw4friends.Login;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -15,7 +15,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import de.thm.draw4friends.Database.Database;
+import de.thm.draw4friends.Home.HomeActivity;
 import de.thm.draw4friends.Model.User;
+import de.thm.draw4friends.R;
 
 /**
  * Created by Yannick Bals on 16.02.2018.
