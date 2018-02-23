@@ -30,5 +30,4 @@ public interface FriendsDAO {
     @Query("SELECT * FROM friends WHERE user_one_id LIKE :userId OR user_two_id LIKE :userId")
     public List<Friends> getAllFriendsOfUser(int userId);
 
-
 }

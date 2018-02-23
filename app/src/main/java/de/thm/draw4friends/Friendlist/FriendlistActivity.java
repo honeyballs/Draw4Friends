@@ -22,6 +22,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import de.thm.draw4friends.Database.Database;
+import de.thm.draw4friends.Model.FriendWithFriendshipId;
 import de.thm.draw4friends.Model.Friends;
 import de.thm.draw4friends.R;
 import de.thm.draw4friends.Model.User;
@@ -68,19 +69,6 @@ public class FriendlistActivity extends AppCompatActivity {
     public boolean onSupportNavigateUp() {
         onBackPressed();
         return true;
-    }
-
-    class FriendWithFriendshipId {
-        private String username;
-        private int friendshipId;
-
-        private FriendWithFriendshipId(String username, int friendshipId) {
-            this.username = username;
-            this.friendshipId = friendshipId;
-        }
-
-        private String getUsername() { return username; }
-        private int getFriendshipId() { return friendshipId; }
     }
 
     class GetFriendsTask extends AsyncTask<User, Void, List<FriendWithFriendshipId>> {

@@ -18,10 +18,13 @@
     <string name="active_challenges">Active challenges</string>
     <string name="turn_draw">It\'s your turn to <b>draw</b>.</string>
     <string name="turn_guess">It\'s your turn to <b>guess</b>.</string>
+    <string name="no_friends">You currently have no friends added. Add a friend by clicking the people icon on the toolbar.</string>
+    <string name="pick_opp">Pick opponent</string>
 
     <!-- Keys -->
     <string name="login_token">token</string>
     <string name="user_obj">user_obj</string>
     <string name="friend">Search for name of a friend</string>
+
 
 </resources>
