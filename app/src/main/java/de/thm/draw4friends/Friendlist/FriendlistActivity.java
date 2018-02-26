@@ -26,12 +26,13 @@ import de.thm.draw4friends.Model.FriendWithFriendshipId;
 import de.thm.draw4friends.Model.Friends;
 import de.thm.draw4friends.R;
 import de.thm.draw4friends.Model.User;
+import de.thm.draw4friends.Server.ServiceFacade;
 
 /**
  * Created by Yannick Bals on 19.02.2018.
  */
 
-public class FriendlistActivity extends AppCompatActivity {
+public class FriendlistActivity extends AppCompatActivity implements FriendlistCommunicator {
 
     private User user;
     private ArrayAdapter<String> adapter;
@@ -59,7 +60,6 @@ public class FriendlistActivity extends AppCompatActivity {
         ListView friendListView = findViewById(R.id.listViewFriends);
         adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, friends);
         friendListView.setAdapter(adapter);
-        new GetFriendsTask().execute(user);
 
         FloatingActionButton fab = findViewById(R.id.addFriendButton);
         fab.setOnClickListener(new FABListener());
@@ -71,36 +71,33 @@ public class FriendlistActivity extends AppCompatActivity {
         return true;
     }
 
-    class GetFriendsTask extends AsyncTask<User, Void, List<FriendWithFriendshipId>> {
+    @Override
+    protected void onResume() {
+        super.onResume();
+        ServiceFacade.getFriends(this, user.getUId());
+    }
 
-        @Override
-        protected List<FriendWithFriendshipId> doInBackground(User... users) {
-            User user = users[0];
+    @Override
+    public void setData(Object obj) {
 
-            Database db = Database.getDatabaseInstance(FriendlistActivity.this);
-            List<Friends> lf = db.friendsDAO().getAllFriendsOfUser(user.getUId());
+    }
 
-            List<FriendWithFriendshipId> list = new ArrayList<>();
-
-            for (Friends lfObj : lf) {
-                User u;
-                if (lfObj.getUserOneId() == user.getUId()) {
-                    u = db.userDAO().getUserById(lfObj.getUserTwoId());
-                } else {
-                    u = db.userDAO().getUserById(lfObj.getUserOneId());
-                }
-                list.add(new FriendWithFriendshipId(u.getUsername(), lfObj.getFriendsid()));
-            }
-            return list;
+    @Override
+    public void setFriendList(List<FriendWithFriendshipId> friendList) {
+        friends.clear();
+        for (FriendWithFriendshipId obj : friendList) {
+            friends.add(obj.getUsername());
         }
+        adapter.notifyDataSetChanged();
+    }
 
-        @Override
-        protected void onPostExecute(List<FriendWithFriendshipId> arr) {
-            friends.clear();
-            for (FriendWithFriendshipId obj : arr) {
-                friends.add(obj.getUsername());
+    @Override
+    public void refreshList(String msg) {
+        if (msg != null) {
+            Toast.makeText(FriendlistActivity.this, msg,Toast.LENGTH_SHORT).show();
+            if (msg.equals("You are friends now")) {
+                ServiceFacade.getFriends(this, user.getUId());
             }
-            adapter.notifyDataSetChanged();
         }
     }
 
@@ -120,7 +117,10 @@ public class FriendlistActivity extends AppCompatActivity {
                 Database db = Database.getDatabaseInstance(FriendlistActivity.this);
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
-                    new AddFriendTask().execute(input.getText().toString());
+                    User mixedUser = new User();
+                    mixedUser.setUId(user.getUId());
+                    mixedUser.setUsername(input.getText().toString());
+                    ServiceFacade.addFriend(FriendlistActivity.this, mixedUser);
                 }
             });
             builder.setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
@@ -131,50 +131,6 @@ public class FriendlistActivity extends AppCompatActivity {
             });
 
             builder.show();
-        }
-
-        class AddFriendTask extends AsyncTask<String, Void, String> {
-
-            @Override
-            protected String doInBackground(String... strings) {
-                String username = strings[0];
-                User user;
-                Database db = Database.getDatabaseInstance(FriendlistActivity.this);
-                user = db.userDAO().findUser(username);
-
-                String msg;
-
-                if (user != null) {
-                    Friends friends = new Friends();
-                    friends.setUserOneId(FriendlistActivity.this.user.getUId());
-                    friends.setUserTwoId(user.getUId());
-                    if (friends.getUserOneId() == friends.getUserTwoId()){
-                        msg = "You can't be your own friend";
-                    } else {
-                        long success = db.friendsDAO().insertFriendsRow(friends);
-                        // see if friendship was inserted successfully
-                        if (success != 0) {
-                            msg = "You are friends now";
-                        } else {
-                            msg = "An error accured while adding";
-                        }
-                    }
-                } else {
-                    msg = "No user was found";
-                }
-
-                return msg;
-            }
-
-            @Override
-            protected void onPostExecute(String msg) {
-                if (msg != null) {
-                    Toast.makeText(FriendlistActivity.this, msg,Toast.LENGTH_SHORT).show();
-                    if (msg.equals("You are friends now")) {
-                        new GetFriendsTask().execute(user);
-                    }
-                }
-            }
         }
 
     }
