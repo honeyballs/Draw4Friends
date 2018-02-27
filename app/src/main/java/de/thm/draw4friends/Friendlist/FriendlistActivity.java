@@ -64,6 +64,7 @@ public class FriendlistActivity extends AppCompatActivity implements FriendlistC
         ListView friendListView = findViewById(R.id.listViewFriends);
         adapter = new FriendListAdapter(this, friends);
         friendListView.setAdapter(adapter);
+        friendListView.setOnItemLongClickListener(new FriendDeleteListener());
 
         FloatingActionButton fab = findViewById(R.id.addFriendButton);
         fab.setOnClickListener(new FABListener());
@@ -98,9 +99,16 @@ public class FriendlistActivity extends AppCompatActivity implements FriendlistC
         if (msg != null) {
             Toast.makeText(FriendlistActivity.this, msg,Toast.LENGTH_SHORT).show();
             if (msg.equals("You are friends now")) {
+                friends.clear();
                 serviceFacade.getFriends(user.getUId());
             }
         }
+    }
+
+    @Override
+    public void refreshAfterDelete() {
+        friends.clear();
+        serviceFacade.getFriends(user.getUId());
     }
 
     class FABListener implements View.OnClickListener {
@@ -138,5 +146,37 @@ public class FriendlistActivity extends AppCompatActivity implements FriendlistC
             builder.show();
         }
 
+    }
+
+
+
+    class FriendDeleteListener implements AdapterView.OnItemLongClickListener {
+
+        @Override
+        public boolean onItemLongClick(AdapterView<?> parent, View view, final int position, long id) {
+
+            AlertDialog.Builder builder = new AlertDialog.Builder(FriendlistActivity.this);
+            builder.setTitle(R.string.delete_friend);
+            builder.setMessage(getString(R.string.delete_friend_sure) + " " + friends.get(position).getUsername() + "?");
+            builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    Friends friendsToDelete = new Friends();
+                    friendsToDelete.setFriendsid(friends.get(position).getFriendshipId());
+                    serviceFacade.deleteFriend(friendsToDelete);
+                }
+            });
+
+            builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.dismiss();
+                }
+            });
+
+            builder.show();
+
+            return true;
+        }
     }
 }

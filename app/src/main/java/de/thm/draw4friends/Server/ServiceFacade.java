@@ -1,6 +1,7 @@
 package de.thm.draw4friends.Server;
 
 import de.thm.draw4friends.Model.Communicator;
+import de.thm.draw4friends.Model.Friends;
 import de.thm.draw4friends.Model.User;
 
 /**
@@ -58,6 +59,10 @@ public class ServiceFacade {
 
     public void addFriend(User user) {
         new FriendsService(communicator).addFriend(user);
+    }
+
+    public void deleteFriend(Friends friends) {
+        new FriendsService(communicator).deleteFriend(friends);
     }
 
 }

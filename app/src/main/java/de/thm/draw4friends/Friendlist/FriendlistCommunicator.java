@@ -15,4 +15,6 @@ public interface FriendlistCommunicator extends Communicator {
 
     void refreshList(String msg);
 
+    void refreshAfterDelete();
+
 }
