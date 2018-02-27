@@ -32,6 +32,7 @@ import de.thm.draw4friends.Model.Challenge;
 import de.thm.draw4friends.Model.FriendWithFriendshipId;
 import de.thm.draw4friends.Model.Friends;
 import de.thm.draw4friends.Model.User;
+import de.thm.draw4friends.Paint.PaintCanvasActivity;
 import de.thm.draw4friends.R;
 import de.thm.draw4friends.Server.ServiceFacade;
 
@@ -180,6 +181,10 @@ public class HomeActivity extends AppCompatActivity implements HomeCommunicator 
                         mixedUser.setUId(user.getUId());
                         mixedUser.setUsername(username);
                         serviceFacade.createChallenge(mixedUser);
+                        Intent intent = new Intent(HomeActivity.this, PaintCanvasActivity.class);
+                        intent.putExtra(getString(R.string.user_obj), user);
+                        startActivity(intent);
+
                     }
                 });
                 builder.show();
