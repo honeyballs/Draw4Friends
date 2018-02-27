@@ -16,6 +16,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -35,10 +36,9 @@ import de.thm.draw4friends.Server.ServiceFacade;
 public class FriendlistActivity extends AppCompatActivity implements FriendlistCommunicator {
 
     private User user;
-    private ArrayAdapter<String> adapter;
+    private FriendListAdapter adapter;
 
-    private List<FriendWithFriendshipId> fwfidArr = new ArrayList<>();
-    private List<String> friends = new ArrayList<>();
+    private List<FriendWithFriendshipId> friends = new ArrayList<>();
 
     private ServiceFacade serviceFacade;
 
@@ -62,7 +62,7 @@ public class FriendlistActivity extends AppCompatActivity implements FriendlistC
 
         // Fill List with Data
         ListView friendListView = findViewById(R.id.listViewFriends);
-        adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, friends);
+        adapter = new FriendListAdapter(this, friends);
         friendListView.setAdapter(adapter);
 
         FloatingActionButton fab = findViewById(R.id.addFriendButton);
@@ -89,10 +89,8 @@ public class FriendlistActivity extends AppCompatActivity implements FriendlistC
     @Override
     public void setFriendList(List<FriendWithFriendshipId> friendList) {
         friends.clear();
-        for (FriendWithFriendshipId obj : friendList) {
-            friends.add(obj.getUsername());
-        }
-        adapter.notifyDataSetChanged();
+        friends = friendList;
+        adapter.addAll(friendList);
     }
 
     @Override
@@ -111,9 +109,12 @@ public class FriendlistActivity extends AppCompatActivity implements FriendlistC
             Log.d("info", "add btn pressed");
             AlertDialog.Builder builder = new AlertDialog.Builder(FriendlistActivity.this);
             builder.setTitle("Add friend");
-            View viewInflated = LayoutInflater.from(FriendlistActivity.this).inflate(R.layout.friend_add_frame_layout, (ViewGroup) findViewById(android.R.id.content), false);
+            View viewInflated = LayoutInflater.from(FriendlistActivity.this).inflate(R.layout.textfield_dialog_layout, null);
 
-            final EditText input = viewInflated.findViewById(R.id.input);
+            final TextView message = viewInflated.findViewById(R.id.dialogTextView);
+            message.setText(R.string.search_friend);
+            final EditText input = viewInflated.findViewById(R.id.dialogEditText);
+            input.setHint(R.string.username);
             builder.setView(viewInflated);
 
             // Set up the buttons

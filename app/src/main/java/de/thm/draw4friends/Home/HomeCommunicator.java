@@ -5,6 +5,7 @@ import java.util.List;
 import de.thm.draw4friends.Model.Challenge;
 import de.thm.draw4friends.Model.Communicator;
 import de.thm.draw4friends.Model.FriendWithFriendshipId;
+import de.thm.draw4friends.Model.User;
 
 /**
  * Created by Yannick Bals on 26.02.2018.

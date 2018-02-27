@@ -42,24 +42,6 @@ public class HomeService {
         new CreateChallengeTask().execute(user);
     }
 
-    class GetChallengesTask extends AsyncTask<Integer, Void, List<Challenge>> {
-
-        @Override
-        protected List<Challenge> doInBackground(Integer... integers) {
-            List<Challenge> challenges = null;
-            Database db = Database.getDatabaseInstance(context);
-            challenges = db.challengeDAO().getChallengesForPlayer(integers[0]);
-            return challenges;
-        }
-
-        @Override
-        protected void onPostExecute(List<Challenge> challenges) {
-            if (challenges != null) {
-                communicator.setChallenges(challenges);
-            }
-        }
-    }
-
     class GetFriendsTask extends AsyncTask<Integer, Void, List<FriendWithFriendshipId>> {
 
         @Override
@@ -102,6 +84,32 @@ public class HomeService {
         @Override
         protected void onPostExecute(Void aVoid) {
             //TODO: Start drawing activity
+        }
+    }
+
+    class GetChallengesTask extends AsyncTask<Integer, Void, List<Challenge>> {
+
+        @Override
+        protected List<Challenge> doInBackground(Integer... integers) {
+            int uId = integers[0];
+            Database db = Database.getDatabaseInstance(context);
+            List<Challenge> challenges = db.challengeDAO().getChallengesForPlayer(uId);
+            List<User> opponents = new ArrayList<>();
+            for (Challenge c : challenges) {
+                User tempUser;
+                if(c.getPlayer() == uId) {
+                    tempUser = db.userDAO().getUserById(c.getOpponent());
+                } else {
+                    tempUser = db.userDAO().getUserById(c.getPlayer());
+                }
+                c.setOpponentName(tempUser.getUsername());
+            }
+            return challenges;
+        }
+
+        @Override
+        protected void onPostExecute(List<Challenge> challenges) {
+            communicator.setChallenges(challenges);
         }
     }
 

@@ -3,6 +3,7 @@ package de.thm.draw4friends.Model;
 import android.arch.persistence.room.ColumnInfo;
 import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.ForeignKey;
+import android.arch.persistence.room.Ignore;
 import android.arch.persistence.room.PrimaryKey;
 
 /**
@@ -29,6 +30,9 @@ public class Challenge {
 
     @ColumnInfo(name = "turn_off")
     private int turnOff;
+
+    @Ignore
+    private String opponentName;
 
     public int getId() {
         return id;
@@ -60,5 +64,13 @@ public class Challenge {
 
     public void setTurnOff(int turnOff) {
         this.turnOff = turnOff;
+    }
+
+    public String getOpponentName() {
+        return opponentName;
+    }
+
+    public void setOpponentName(String opponentName) {
+        this.opponentName = opponentName;
     }
 }
