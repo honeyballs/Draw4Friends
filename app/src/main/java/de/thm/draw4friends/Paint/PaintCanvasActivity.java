@@ -26,6 +26,8 @@ public class PaintCanvasActivity extends AppCompatActivity {
     //Colors
     private ImageButton blackButton, whiteButton, redButton, yellowButton, greenButton, blueButton, brownButton, skinButton;
 
+    private ObserverTextView colorText;
+
     private SubjectColor currentColor;
 
     @Override
@@ -38,27 +40,38 @@ public class PaintCanvasActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         customCanvas = (CanvasView) findViewById(R.id.signature_canvas);
-
-        currentColor = new SubjectColor(getColorString(ContextCompat.getColor(this, R.color.red)));
+        currentColor = new SubjectColor(getColorString(ContextCompat.getColor(this, R.color.black)));
 
         this.brushButton = findViewById(R.id.brushTool);
         this.circleButton = findViewById(R.id.circleTool);
         this.squareButton = findViewById(R.id.squareTool);
         this.undoButton = findViewById(R.id.undoButton);
 
+        this.colorText = findViewById(R.id.colorTextView);
+
         currentColor.registerObserver(brushButton);
         currentColor.registerObserver(circleButton);
         currentColor.registerObserver(squareButton);
+        currentColor.registerObserver(colorText);
         currentColor.notifyObservers();
 
+        ColorButtonListener colorButtonListener = new ColorButtonListener();
         this.blackButton = findViewById(R.id.colorBlack);
+        this.blackButton.setOnClickListener(colorButtonListener);
         this.whiteButton = findViewById(R.id.colorWhite);
+        this.whiteButton.setOnClickListener(colorButtonListener);
         this.redButton = findViewById(R.id.colorRed);
+        this.redButton.setOnClickListener(colorButtonListener);
         this.yellowButton = findViewById(R.id.colorYellow);
+        this.yellowButton.setOnClickListener(colorButtonListener);
         this.greenButton = findViewById(R.id.colorGreen);
+        this.greenButton.setOnClickListener(colorButtonListener);
         this.blueButton = findViewById(R.id.colorBlue);
+        this.blueButton.setOnClickListener(colorButtonListener);
         this.brownButton = findViewById(R.id.colorBrown);
+        this.brownButton.setOnClickListener(colorButtonListener);
         this.skinButton = findViewById(R.id.colorSkin);
+        this.skinButton.setOnClickListener(colorButtonListener);
     }
 
     @Override
@@ -81,5 +94,40 @@ public class PaintCanvasActivity extends AppCompatActivity {
 
     public void clearCanvas(View v) {
         customCanvas.clearCanvas();
+    }
+
+    class ColorButtonListener implements View.OnClickListener {
+
+        @Override
+        public void onClick(View v) {
+            switch (v.getId()) {
+                case R.id.colorBlack:
+                    currentColor.setColor(getColorString(ContextCompat.getColor(PaintCanvasActivity.this, R.color.black)));
+                    break;
+                case R.id.colorWhite:
+                    currentColor.setColor(getColorString(ContextCompat.getColor(PaintCanvasActivity.this, R.color.white)));
+                    break;
+                case R.id.colorBlue:
+                    currentColor.setColor(getColorString(ContextCompat.getColor(PaintCanvasActivity.this, R.color.blue)));
+                    break;
+                case R.id.colorRed:
+                    currentColor.setColor(getColorString(ContextCompat.getColor(PaintCanvasActivity.this, R.color.red)));
+                    break;
+                case R.id.colorYellow:
+                    currentColor.setColor(getColorString(ContextCompat.getColor(PaintCanvasActivity.this, R.color.yellow)));
+                    break;
+                case R.id.colorGreen:
+                    currentColor.setColor(getColorString(ContextCompat.getColor(PaintCanvasActivity.this, R.color.green)));
+                    break;
+                case R.id.colorBrown:
+                    currentColor.setColor(getColorString(ContextCompat.getColor(PaintCanvasActivity.this, R.color.brown)));
+                    break;
+                case R.id.colorSkin:
+                    currentColor.setColor(getColorString(ContextCompat.getColor(PaintCanvasActivity.this, R.color.skin)));
+                    break;
+                default:
+                    Log.e("DEFAULT ", "what");
+            }
+        }
     }
 }

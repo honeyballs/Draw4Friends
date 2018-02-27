@@ -36,4 +36,13 @@ public class SubjectColor implements Subject{
             observer.update(color);
         }
     }
+
+    public String getColor() {
+        return color;
+    }
+
+    public void setColor(String color) {
+        this.color = color;
+        notifyObservers();
+    }
 }

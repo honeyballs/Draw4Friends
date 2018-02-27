@@ -31,5 +31,15 @@
     <string name="drawImage">Draw Image</string>
     <string name="start_challenge">Start challenge</string>
 
+    <string name="current_color">Selected color: </string>
+    <string name="black">black</string>
+    <string name="white">white</string>
+    <string name="blue">blue</string>
+    <string name="red">red</string>
+    <string name="yellow">yellow</string>
+    <string name="green">green</string>
+    <string name="brown">brown</string>
+    <string name="pink">pink</string>
+
 
 </resources>
