@@ -16,6 +16,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -26,22 +27,26 @@ import de.thm.draw4friends.Model.FriendWithFriendshipId;
 import de.thm.draw4friends.Model.Friends;
 import de.thm.draw4friends.R;
 import de.thm.draw4friends.Model.User;
+import de.thm.draw4friends.Server.ServiceFacade;
 
 /**
  * Created by Yannick Bals on 19.02.2018.
  */
 
-public class FriendlistActivity extends AppCompatActivity {
+public class FriendlistActivity extends AppCompatActivity implements FriendlistCommunicator {
 
     private User user;
-    private ArrayAdapter<String> adapter;
+    private FriendListAdapter adapter;
 
-    private List<FriendWithFriendshipId> fwfidArr = new ArrayList<>();
-    private List<String> friends = new ArrayList<>();
+    private List<FriendWithFriendshipId> friends = new ArrayList<>();
+
+    private ServiceFacade serviceFacade;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        this.serviceFacade = new ServiceFacade(this);
 
         setContentView(R.layout.friendlist_layout);
 
@@ -57,9 +62,9 @@ public class FriendlistActivity extends AppCompatActivity {
 
         // Fill List with Data
         ListView friendListView = findViewById(R.id.listViewFriends);
-        adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, friends);
+        adapter = new FriendListAdapter(this, friends);
         friendListView.setAdapter(adapter);
-        new GetFriendsTask().execute(user);
+        friendListView.setOnItemLongClickListener(new FriendDeleteListener());
 
         FloatingActionButton fab = findViewById(R.id.addFriendButton);
         fab.setOnClickListener(new FABListener());
@@ -71,37 +76,39 @@ public class FriendlistActivity extends AppCompatActivity {
         return true;
     }
 
-    class GetFriendsTask extends AsyncTask<User, Void, List<FriendWithFriendshipId>> {
+    @Override
+    protected void onResume() {
+        super.onResume();
+        serviceFacade.getFriends(user.getUId());
+    }
 
-        @Override
-        protected List<FriendWithFriendshipId> doInBackground(User... users) {
-            User user = users[0];
+    @Override
+    public void setData(Object obj) {
 
-            Database db = Database.getDatabaseInstance(FriendlistActivity.this);
-            List<Friends> lf = db.friendsDAO().getAllFriendsOfUser(user.getUId());
+    }
 
-            List<FriendWithFriendshipId> list = new ArrayList<>();
+    @Override
+    public void setFriendList(List<FriendWithFriendshipId> friendList) {
+        friends.clear();
+        friends = friendList;
+        adapter.addAll(friendList);
+    }
 
-            for (Friends lfObj : lf) {
-                User u;
-                if (lfObj.getUserOneId() == user.getUId()) {
-                    u = db.userDAO().getUserById(lfObj.getUserTwoId());
-                } else {
-                    u = db.userDAO().getUserById(lfObj.getUserOneId());
-                }
-                list.add(new FriendWithFriendshipId(u.getUsername(), lfObj.getFriendsid()));
+    @Override
+    public void refreshList(String msg) {
+        if (msg != null) {
+            Toast.makeText(FriendlistActivity.this, msg,Toast.LENGTH_SHORT).show();
+            if (msg.equals("You are friends now")) {
+                friends.clear();
+                serviceFacade.getFriends(user.getUId());
             }
-            return list;
         }
+    }
 
-        @Override
-        protected void onPostExecute(List<FriendWithFriendshipId> arr) {
-            friends.clear();
-            for (FriendWithFriendshipId obj : arr) {
-                friends.add(obj.getUsername());
-            }
-            adapter.notifyDataSetChanged();
-        }
+    @Override
+    public void refreshAfterDelete() {
+        friends.clear();
+        serviceFacade.getFriends(user.getUId());
     }
 
     class FABListener implements View.OnClickListener {
@@ -110,9 +117,12 @@ public class FriendlistActivity extends AppCompatActivity {
             Log.d("info", "add btn pressed");
             AlertDialog.Builder builder = new AlertDialog.Builder(FriendlistActivity.this);
             builder.setTitle("Add friend");
-            View viewInflated = LayoutInflater.from(FriendlistActivity.this).inflate(R.layout.friend_add_frame_layout, (ViewGroup) findViewById(android.R.id.content), false);
+            View viewInflated = LayoutInflater.from(FriendlistActivity.this).inflate(R.layout.textfield_dialog_layout, null);
 
-            final EditText input = viewInflated.findViewById(R.id.input);
+            final TextView message = viewInflated.findViewById(R.id.dialogTextView);
+            message.setText(R.string.search_friend);
+            final EditText input = viewInflated.findViewById(R.id.dialogEditText);
+            input.setHint(R.string.username);
             builder.setView(viewInflated);
 
             // Set up the buttons
@@ -120,7 +130,10 @@ public class FriendlistActivity extends AppCompatActivity {
                 Database db = Database.getDatabaseInstance(FriendlistActivity.this);
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
-                    new AddFriendTask().execute(input.getText().toString());
+                    User mixedUser = new User();
+                    mixedUser.setUId(user.getUId());
+                    mixedUser.setUsername(input.getText().toString());
+                    serviceFacade.addFriend(mixedUser);
                 }
             });
             builder.setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
@@ -133,49 +146,37 @@ public class FriendlistActivity extends AppCompatActivity {
             builder.show();
         }
 
-        class AddFriendTask extends AsyncTask<String, Void, String> {
+    }
 
-            @Override
-            protected String doInBackground(String... strings) {
-                String username = strings[0];
-                User user;
-                Database db = Database.getDatabaseInstance(FriendlistActivity.this);
-                user = db.userDAO().findUser(username);
 
-                String msg;
 
-                if (user != null) {
-                    Friends friends = new Friends();
-                    friends.setUserOneId(FriendlistActivity.this.user.getUId());
-                    friends.setUserTwoId(user.getUId());
-                    if (friends.getUserOneId() == friends.getUserTwoId()){
-                        msg = "You can't be your own friend";
-                    } else {
-                        long success = db.friendsDAO().insertFriendsRow(friends);
-                        // see if friendship was inserted successfully
-                        if (success != 0) {
-                            msg = "You are friends now";
-                        } else {
-                            msg = "An error accured while adding";
-                        }
-                    }
-                } else {
-                    msg = "No user was found";
+    class FriendDeleteListener implements AdapterView.OnItemLongClickListener {
+
+        @Override
+        public boolean onItemLongClick(AdapterView<?> parent, View view, final int position, long id) {
+
+            AlertDialog.Builder builder = new AlertDialog.Builder(FriendlistActivity.this);
+            builder.setTitle(R.string.delete_friend);
+            builder.setMessage(getString(R.string.delete_friend_sure) + " " + friends.get(position).getUsername() + "?");
+            builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    Friends friendsToDelete = new Friends();
+                    friendsToDelete.setFriendsid(friends.get(position).getFriendshipId());
+                    serviceFacade.deleteFriend(friendsToDelete);
                 }
+            });
 
-                return msg;
-            }
-
-            @Override
-            protected void onPostExecute(String msg) {
-                if (msg != null) {
-                    Toast.makeText(FriendlistActivity.this, msg,Toast.LENGTH_SHORT).show();
-                    if (msg.equals("You are friends now")) {
-                        new GetFriendsTask().execute(user);
-                    }
+            builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.dismiss();
                 }
-            }
+            });
+
+            builder.show();
+
+            return true;
         }
-
     }
 }

@@ -20,11 +20,16 @@
     <string name="turn_guess">It\'s your turn to <b>guess</b>.</string>
     <string name="no_friends">You currently have no friends added. Add a friend by clicking the people icon on the toolbar.</string>
     <string name="pick_opp">Pick opponent</string>
+    <string name="search_friend">Search for a friend by looking for their username.</string>
+    <string name="delete_friend">Delete friend</string>
+    <string name="delete_friend_sure">Are you sure you want to delete this friend: </string>
 
     <!-- Keys -->
     <string name="login_token">token</string>
     <string name="user_obj">user_obj</string>
     <string name="friend">Search for name of a friend</string>
+    <string name="drawImage">Draw Image</string>
+    <string name="start_challenge">Start challenge</string>
 
 
 </resources>

@@ -32,14 +32,16 @@ import de.thm.draw4friends.Model.Challenge;
 import de.thm.draw4friends.Model.FriendWithFriendshipId;
 import de.thm.draw4friends.Model.Friends;
 import de.thm.draw4friends.Model.User;
+import de.thm.draw4friends.Paint.PaintCanvasActivity;
 import de.thm.draw4friends.R;
+import de.thm.draw4friends.Server.ServiceFacade;
 
 
 /**
  * Created by Yannick Bals on 19.02.2018.
  */
 
-public class HomeActivity extends AppCompatActivity {
+public class HomeActivity extends AppCompatActivity implements HomeCommunicator {
 
     private User user;
     private List<FriendWithFriendshipId> friends = new ArrayList<>();
@@ -48,9 +50,13 @@ public class HomeActivity extends AppCompatActivity {
     private Button startChallengeButton;
     private ListView challengeListView;
 
+    private ServiceFacade serviceFacade;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        serviceFacade = new ServiceFacade(this);
 
         setContentView(R.layout.home_layout);
 
@@ -98,8 +104,7 @@ public class HomeActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         friends.clear();
-        new getChallengesTask().execute(user.getUId());
-        new getFriendsTask().execute(user.getUId());
+        serviceFacade.getFriendsForChallenges(user.getUId());
     }
 
     private void logoutDialog() {
@@ -127,6 +132,28 @@ public class HomeActivity extends AppCompatActivity {
         builder.create().show();
     }
 
+    @Override
+    public void setChallenges(List<Challenge> challenges) {
+        adapter.clear();
+        adapter.addAll(challenges);
+    }
+
+    @Override
+    public void setFriends(List<FriendWithFriendshipId> friends) {
+        this.friends = friends;
+        serviceFacade.getChallenges(user.getUId());
+    }
+
+    @Override
+    public void createChallenge(Challenge challenge) {
+        //TODO: Start Activity
+    }
+
+    @Override
+    public void setData(Object obj) {
+
+    }
+
     class ChallengeButtonListener implements View.OnClickListener {
 
         @Override
@@ -136,7 +163,7 @@ public class HomeActivity extends AppCompatActivity {
                 //Show a dialog to pick a friend
                 AlertDialog.Builder builder = new AlertDialog.Builder(HomeActivity.this);
                 builder.setTitle(R.string.pick_opp);
-                final ArrayAdapter<String> friendsAdapter = new ArrayAdapter<String>(HomeActivity.this, android.R.layout.select_dialog_singlechoice);
+                final ArrayAdapter<String> friendsAdapter = new ArrayAdapter<String>(HomeActivity.this, android.R.layout.simple_list_item_1);
                 for (FriendWithFriendshipId f : friends) {
                     friendsAdapter.add(f.getUsername());
                 }
@@ -150,7 +177,14 @@ public class HomeActivity extends AppCompatActivity {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         String username = friendsAdapter.getItem(which);
-                        new CreateChallengeTask().execute(username);
+                        User mixedUser = new User();
+                        mixedUser.setUId(user.getUId());
+                        mixedUser.setUsername(username);
+                        serviceFacade.createChallenge(mixedUser);
+                        Intent intent = new Intent(HomeActivity.this, PaintCanvasActivity.class);
+                        intent.putExtra(getString(R.string.user_obj), user);
+                        startActivity(intent);
+
                     }
                 });
                 builder.show();
@@ -160,69 +194,4 @@ public class HomeActivity extends AppCompatActivity {
 
         }
     }
-
-    class getChallengesTask extends AsyncTask<Integer, Void, List<Challenge>> {
-
-        @Override
-        protected List<Challenge> doInBackground(Integer... integers) {
-            List<Challenge> challenges = null;
-            Database db = Database.getDatabaseInstance(HomeActivity.this);
-            challenges = db.challengeDAO().getChallengesForPlayer(integers[0]);
-            return challenges;
-        }
-
-        @Override
-        protected void onPostExecute(List<Challenge> challenges) {
-            if (challenges != null) {
-                adapter.clear();
-                adapter.addAll(challenges);
-            }
-        }
-    }
-
-    class getFriendsTask extends AsyncTask<Integer, Void, List<FriendWithFriendshipId>> {
-
-        @Override
-        protected List<FriendWithFriendshipId> doInBackground(Integer... integers) {
-            List<FriendWithFriendshipId> friends = new ArrayList<>();
-            Database db = Database.getDatabaseInstance(HomeActivity.this);
-            List<Friends> friendsTemp = db.friendsDAO().getAllFriendsOfUser(integers[0]);
-            for (Friends f : friendsTemp) {
-                User u;
-                if (f.getUserOneId() == user.getUId()) {
-                    u = db.userDAO().getUserById(f.getUserTwoId());
-                } else {
-                    u = db.userDAO().getUserById(f.getUserOneId());
-                }
-                friends.add(new FriendWithFriendshipId(u.getUsername(), f.getFriendsid()));
-            }
-            return friends;
-        }
-
-        @Override
-        protected void onPostExecute(List<FriendWithFriendshipId> friendsList) {
-            friends = friendsList;
-        }
-    }
-
-    class CreateChallengeTask extends AsyncTask<String, Void, Void> {
-
-        @Override
-        protected Void doInBackground(String... strings) {
-            Database db = Database.getDatabaseInstance(HomeActivity.this);
-            User opponent = db.userDAO().findUser(strings[0]);
-            Challenge challenge = new Challenge();
-            challenge.setPlayer(user.getUId());
-            challenge.setOpponent(opponent.getUId());
-            challenge.setTurnOff(user.getUId());
-            db.challengeDAO().insertChallenge(challenge);
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(Void aVoid) {
-            //TODO: Start drawing activity
-        }
-    }
-
 }
