@@ -40,9 +40,13 @@ public class FriendlistActivity extends AppCompatActivity implements FriendlistC
     private List<FriendWithFriendshipId> fwfidArr = new ArrayList<>();
     private List<String> friends = new ArrayList<>();
 
+    private ServiceFacade serviceFacade;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        this.serviceFacade = new ServiceFacade(this);
 
         setContentView(R.layout.friendlist_layout);
 
@@ -74,7 +78,7 @@ public class FriendlistActivity extends AppCompatActivity implements FriendlistC
     @Override
     protected void onResume() {
         super.onResume();
-        ServiceFacade.getFriends(this, user.getUId());
+        serviceFacade.getFriends(user.getUId());
     }
 
     @Override
@@ -96,7 +100,7 @@ public class FriendlistActivity extends AppCompatActivity implements FriendlistC
         if (msg != null) {
             Toast.makeText(FriendlistActivity.this, msg,Toast.LENGTH_SHORT).show();
             if (msg.equals("You are friends now")) {
-                ServiceFacade.getFriends(this, user.getUId());
+                serviceFacade.getFriends(user.getUId());
             }
         }
     }
@@ -120,7 +124,7 @@ public class FriendlistActivity extends AppCompatActivity implements FriendlistC
                     User mixedUser = new User();
                     mixedUser.setUId(user.getUId());
                     mixedUser.setUsername(input.getText().toString());
-                    ServiceFacade.addFriend(FriendlistActivity.this, mixedUser);
+                    serviceFacade.addFriend(mixedUser);
                 }
             });
             builder.setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {

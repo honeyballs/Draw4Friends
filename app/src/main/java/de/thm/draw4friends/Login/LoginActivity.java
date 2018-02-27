@@ -40,12 +40,16 @@ public class LoginActivity extends AppCompatActivity implements Communicator {
     private EditText pwConfirmEdit;
     private Button loginButton;
 
+    private ServiceFacade serviceFacade;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        serviceFacade = new ServiceFacade(this);
+
         //Try to login with the token
-        ServiceFacade.loginWithToken(this);
+        serviceFacade.loginWithToken();
 
         setContentView(R.layout.login_layout);
         this.headline = findViewById(R.id.loginHeadline);
@@ -97,9 +101,9 @@ public class LoginActivity extends AppCompatActivity implements Communicator {
         @Override
         public void onClick(View v) {
             if (mode.equals(LOGIN_MODE)) {
-                ServiceFacade.loginUser(LoginActivity.this, userEdit.getText().toString(), pwEdit.getText().toString());
+                serviceFacade.loginUser(userEdit.getText().toString(), pwEdit.getText().toString());
             } else if (mode.equals(REGISTER_MODE)) {
-                ServiceFacade.registerUser(LoginActivity.this, userEdit.getText().toString(), pwEdit.getText().toString(), pwConfirmEdit.getText().toString());
+                serviceFacade.registerUser(userEdit.getText().toString(), pwEdit.getText().toString(), pwConfirmEdit.getText().toString());
             }
         }
     }

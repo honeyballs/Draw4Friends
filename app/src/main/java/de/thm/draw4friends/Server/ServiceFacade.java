@@ -9,48 +9,55 @@ import de.thm.draw4friends.Model.User;
 
 public class ServiceFacade {
 
+    private Communicator communicator;
+
+    public ServiceFacade(Communicator c) {
+        this.communicator = c;
+    }
+
+
     /**
      * Everything Account related.
      */
 
-    public static void registerUser(Communicator c, String username, String pw, String pwConfirm) {
-        new AccountService(c).registerUser(username, pw, pwConfirm);
+    public void registerUser(String username, String pw, String pwConfirm) {
+        new AccountService(communicator).registerUser(username, pw, pwConfirm);
     }
 
-    public static void loginUser(Communicator c, String username, String pw) {
-        new AccountService(c).loginUser(username, pw);
+    public void loginUser(String username, String pw) {
+        new AccountService(communicator).loginUser(username, pw);
     }
 
-    public static void loginWithToken(Communicator c) {
-        new AccountService(c).loginWithToken();
+    public void loginWithToken() {
+        new AccountService(communicator).loginWithToken();
     }
 
     /**
      * Everything Challenge related.
      */
 
-    public static void getChallenges(Communicator c, int uId) {
-        new HomeService(c).getChallenges(uId);
+    public void getChallenges(int uId) {
+        new HomeService(communicator).getChallenges(uId);
     }
 
-    public static void getFriendsForChallenges(Communicator c, int uId) {
-        new HomeService(c).getFriends(uId);
+    public void getFriendsForChallenges(int uId) {
+        new HomeService(communicator).getFriends(uId);
     }
 
-    public static void createChallenge(Communicator c, User user) {
-        new HomeService(c).createChallenge(user);
+    public void createChallenge(User user) {
+        new HomeService(communicator).createChallenge(user);
     }
 
     /**
      * Everything Friend related.
      */
 
-    public static void getFriends(Communicator c, int uId) {
-        new FriendsService(c).getFriends(uId);
+    public void getFriends(int uId) {
+        new FriendsService(communicator).getFriends(uId);
     }
 
-    public static void addFriend(Communicator c, User user) {
-        new FriendsService(c).addFriend(user);
+    public void addFriend(User user) {
+        new FriendsService(communicator).addFriend(user);
     }
 
 }

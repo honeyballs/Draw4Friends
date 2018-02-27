@@ -49,9 +49,13 @@ public class HomeActivity extends AppCompatActivity implements HomeCommunicator 
     private Button startChallengeButton;
     private ListView challengeListView;
 
+    private ServiceFacade serviceFacade;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        serviceFacade = new ServiceFacade(this);
 
         setContentView(R.layout.home_layout);
 
@@ -99,8 +103,8 @@ public class HomeActivity extends AppCompatActivity implements HomeCommunicator 
     protected void onResume() {
         super.onResume();
         friends.clear();
-        ServiceFacade.getChallenges(this, user.getUId());
-        ServiceFacade.getFriendsForChallenges(this, user.getUId());
+        serviceFacade.getChallenges(user.getUId());
+        serviceFacade.getFriendsForChallenges(user.getUId());
     }
 
     private void logoutDialog() {
@@ -175,7 +179,7 @@ public class HomeActivity extends AppCompatActivity implements HomeCommunicator 
                         User mixedUser = new User();
                         mixedUser.setUId(user.getUId());
                         mixedUser.setUsername(username);
-                        ServiceFacade.createChallenge(HomeActivity.this, mixedUser);
+                        serviceFacade.createChallenge(mixedUser);
                     }
                 });
                 builder.show();
