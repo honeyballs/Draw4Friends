@@ -39,6 +39,10 @@ public class HomeService {
         new GetFriendsTask().execute(id);
     }
 
+    public void getIdOfOpponent(String username){
+        new GetIdOfOpponentTask().execute(username);
+    }
+
     public void createChallenge(User user) {
         new CreateChallengeTask().execute(user);
     }
@@ -88,7 +92,6 @@ public class HomeService {
 
         @Override
         protected void onPostExecute(Void aVoid) {
-            //TODO: Start drawing activity
         }
     }
 
@@ -128,6 +131,21 @@ public class HomeService {
             return null;
         }
 
+    }
+
+    class GetIdOfOpponentTask extends AsyncTask<String, Void, Integer> {
+
+        @Override
+        protected Integer doInBackground(String... strings) {
+            Database db = Database.getDatabaseInstance(context);
+            User user = db.userDAO().findUser(strings[0]);
+            return user.getUId();
+        }
+
+        @Override
+        protected void onPostExecute(Integer integer) {
+            communicator.setOpponentId(integer);
+        }
     }
 
 }

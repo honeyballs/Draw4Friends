@@ -53,6 +53,10 @@ public class ServiceFacade {
         new HomeService(communicator).deleteAllChallengesOfUser(uId);
     }
 
+    public void getIdOfOpponent(String username) {
+        new HomeService(communicator).getIdOfOpponent(username);
+    }
+
     /**
      * Everything Friend related.
      */

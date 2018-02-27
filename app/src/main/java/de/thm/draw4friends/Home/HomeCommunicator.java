@@ -17,6 +17,6 @@ public interface HomeCommunicator extends Communicator {
 
     void setFriends(List<FriendWithFriendshipId> friends);
 
-    void createChallenge(Challenge challenge);
+    void setOpponentId(Integer id);
 
 }

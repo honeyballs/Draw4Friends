@@ -5,6 +5,8 @@ import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.ForeignKey;
 import android.arch.persistence.room.Ignore;
 import android.arch.persistence.room.PrimaryKey;
+import android.os.Parcel;
+import android.os.Parcelable;
 
 /**
  * Created by Yannick Bals on 22.02.2018.
@@ -20,7 +22,7 @@ import android.arch.persistence.room.PrimaryKey;
                         parentColumns = "uId",
                         childColumns = "opponent",
                         onDelete = ForeignKey.CASCADE)})
-public class Challenge {
+public class Challenge implements Parcelable{
 
     @PrimaryKey(autoGenerate = true)
     private int id;
@@ -33,6 +35,19 @@ public class Challenge {
 
     @Ignore
     private String opponentName;
+
+    public Challenge() {
+        super();
+    }
+
+    @Ignore
+    public Challenge(Parcel in) {
+        id = in.readInt();
+        player = in.readInt();
+        opponent = in.readInt();
+        turnOff = in.readInt();
+        opponentName = in.readString();
+    }
 
     public int getId() {
         return id;
@@ -73,4 +88,31 @@ public class Challenge {
     public void setOpponentName(String opponentName) {
         this.opponentName = opponentName;
     }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeInt(id);
+        dest.writeInt(player);
+        dest.writeInt(opponent);
+        dest.writeInt(turnOff);
+        dest.writeString(opponentName);
+    }
+
+    public static final Parcelable.Creator<Challenge> CREATOR = new Parcelable.Creator<Challenge>() {
+
+        @Override
+        public Challenge createFromParcel(Parcel source) {
+            return new Challenge(source);
+        }
+
+        @Override
+        public Challenge[] newArray(int size) {
+            return new Challenge[size];
+        }
+    };
 }

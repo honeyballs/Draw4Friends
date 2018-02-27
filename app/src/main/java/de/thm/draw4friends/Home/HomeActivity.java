@@ -17,6 +17,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Adapter;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
@@ -52,6 +53,8 @@ public class HomeActivity extends AppCompatActivity implements HomeCommunicator 
 
     private ServiceFacade serviceFacade;
 
+    private Challenge newChallenge;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -76,6 +79,7 @@ public class HomeActivity extends AppCompatActivity implements HomeCommunicator 
         this.challengeListView = findViewById(R.id.challengeList);
         adapter = new ChallengeAdapter(this, new ArrayList<Challenge>(), user.getUId());
         this.challengeListView.setAdapter(adapter);
+        this.challengeListView.setOnItemClickListener(new ListItemListener());
 
     }
 
@@ -147,8 +151,11 @@ public class HomeActivity extends AppCompatActivity implements HomeCommunicator 
     }
 
     @Override
-    public void createChallenge(Challenge challenge) {
-        //TODO: Start Activity
+    public void setOpponentId(Integer id) {
+        newChallenge.setOpponent(id);
+        Intent intent = new Intent(HomeActivity.this, PaintCanvasActivity.class);
+        intent.putExtra(getString(R.string.challenge_obj), newChallenge);
+        startActivity(intent);
     }
 
     @Override
@@ -178,15 +185,12 @@ public class HomeActivity extends AppCompatActivity implements HomeCommunicator 
                 builder.setAdapter(friendsAdapter, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        String username = friendsAdapter.getItem(which);
-                        User mixedUser = new User();
-                        mixedUser.setUId(user.getUId());
-                        mixedUser.setUsername(username);
-                        serviceFacade.createChallenge(mixedUser);
-                        Intent intent = new Intent(HomeActivity.this, PaintCanvasActivity.class);
-                        intent.putExtra(getString(R.string.user_obj), user);
-                        startActivity(intent);
-
+                        String oppnentName = friendsAdapter.getItem(which);
+                        newChallenge = new Challenge();
+                        newChallenge.setPlayer(user.getUId());
+                        newChallenge.setOpponentName(oppnentName);
+                        newChallenge.setTurnOff(user.getUId());
+                        serviceFacade.getIdOfOpponent(oppnentName);
                     }
                 });
                 builder.show();
@@ -194,6 +198,21 @@ public class HomeActivity extends AppCompatActivity implements HomeCommunicator 
                 Toast.makeText(HomeActivity.this, R.string.no_friends, Toast.LENGTH_LONG).show();
             }
 
+        }
+    }
+
+    class ListItemListener implements AdapterView.OnItemClickListener {
+
+        @Override
+        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+            Challenge challenge = adapter.getItem(position);
+            if (challenge.getTurnOff() == user.getUId()) {
+                Intent intent = new Intent(HomeActivity.this, PaintCanvasActivity.class);
+                intent.putExtra(getString(R.string.challenge_obj), challenge);
+                startActivity(intent);
+            } else {
+                //TODO: Guess Activity
+            }
         }
     }
 }
