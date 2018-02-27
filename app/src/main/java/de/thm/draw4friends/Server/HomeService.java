@@ -2,6 +2,7 @@ package de.thm.draw4friends.Server;
 
 import android.content.Context;
 import android.os.AsyncTask;
+import android.provider.ContactsContract;
 import android.support.v7.app.AppCompatActivity;
 
 import java.util.ArrayList;
@@ -40,6 +41,10 @@ public class HomeService {
 
     public void createChallenge(User user) {
         new CreateChallengeTask().execute(user);
+    }
+
+    public void deleteAllChallengesOfUser(int uId) {
+        new DeleteAllChallengesOfUserTask().execute(uId);
     }
 
     class GetFriendsTask extends AsyncTask<Integer, Void, List<FriendWithFriendshipId>> {
@@ -111,6 +116,18 @@ public class HomeService {
         protected void onPostExecute(List<Challenge> challenges) {
             communicator.setChallenges(challenges);
         }
+    }
+
+    class DeleteAllChallengesOfUserTask extends AsyncTask<Integer, Void, Void> {
+
+        @Override
+        protected Void doInBackground(Integer... integers) {
+            Database db = Database.getDatabaseInstance(context);
+            List<Challenge> challenges = db.challengeDAO().getChallengesForPlayer(integers[0]);
+            db.challengeDAO().deleteChallenges(challenges);
+            return null;
+        }
+
     }
 
 }

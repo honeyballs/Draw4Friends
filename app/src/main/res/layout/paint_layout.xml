@@ -13,7 +13,7 @@
         android:orientation="horizontal"
         android:background="#d3d3d3">
 
-        <ImageButton
+        <de.thm.draw4friends.Paint.ObserverImageButton
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
@@ -28,7 +28,7 @@
             android:layout_height="0dp"
             android:layout_weight="1"/>
 
-        <ImageButton
+        <de.thm.draw4friends.Paint.ObserverImageButton
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
@@ -43,7 +43,7 @@
             android:layout_height="0dp"
             android:layout_weight="1"/>
 
-        <ImageButton
+        <de.thm.draw4friends.Paint.ObserverImageButton
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
@@ -58,7 +58,7 @@
             android:layout_height="0dp"
             android:layout_weight="1"/>
 
-        <ImageButton
+        <de.thm.draw4friends.Paint.ObserverImageButton
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"

@@ -57,7 +57,6 @@ public class HomeActivity extends AppCompatActivity implements HomeCommunicator 
         super.onCreate(savedInstanceState);
 
         serviceFacade = new ServiceFacade(this);
-
         setContentView(R.layout.home_layout);
 
         Toolbar toolbar = findViewById(R.id.toolbar);
@@ -68,6 +67,9 @@ public class HomeActivity extends AppCompatActivity implements HomeCommunicator 
             user = bundle.getParcelable(getString(R.string.user_obj));
             Log.e("USER: ", user.getUsername());
         }
+
+        //TODO: Remove this, only for testing
+        serviceFacade.deleteAllChallengesOfUser(user.getUId());
 
         this.startChallengeButton = findViewById(R.id.startChallengeButton);
         this.startChallengeButton.setOnClickListener(new ChallengeButtonListener());

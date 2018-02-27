@@ -49,6 +49,10 @@ public class ServiceFacade {
         new HomeService(communicator).createChallenge(user);
     }
 
+    public void deleteAllChallengesOfUser(int uId) {
+        new HomeService(communicator).deleteAllChallengesOfUser(uId);
+    }
+
     /**
      * Everything Friend related.
      */

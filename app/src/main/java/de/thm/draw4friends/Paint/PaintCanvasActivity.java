@@ -1,8 +1,11 @@
 package de.thm.draw4friends.Paint;
 
+import android.graphics.Color;
 import android.os.Bundle;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.View;
@@ -18,10 +21,12 @@ public class PaintCanvasActivity extends AppCompatActivity {
     private CanvasView customCanvas;
 
     //Tools
-    private ImageButton brushButton, circleButton, squareButton, undoButton;
+    private ObserverImageButton brushButton, circleButton, squareButton, undoButton;
 
     //Colors
     private ImageButton blackButton, whiteButton, redButton, yellowButton, greenButton, blueButton, brownButton, skinButton;
+
+    private SubjectColor currentColor;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,10 +39,17 @@ public class PaintCanvasActivity extends AppCompatActivity {
 
         customCanvas = (CanvasView) findViewById(R.id.signature_canvas);
 
+        currentColor = new SubjectColor(getColorString(ContextCompat.getColor(this, R.color.red)));
+
         this.brushButton = findViewById(R.id.brushTool);
         this.circleButton = findViewById(R.id.circleTool);
         this.squareButton = findViewById(R.id.squareTool);
         this.undoButton = findViewById(R.id.undoButton);
+
+        currentColor.registerObserver(brushButton);
+        currentColor.registerObserver(circleButton);
+        currentColor.registerObserver(squareButton);
+        currentColor.notifyObservers();
 
         this.blackButton = findViewById(R.id.colorBlack);
         this.whiteButton = findViewById(R.id.colorWhite);
@@ -60,6 +72,11 @@ public class PaintCanvasActivity extends AppCompatActivity {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.paint_menu, menu);
         return true;
+    }
+
+    private String getColorString(Integer color) {
+        String colorString = Integer.toHexString(color);
+        return "#" + colorString.substring(2);
     }
 
     public void clearCanvas(View v) {
