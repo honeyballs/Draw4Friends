@@ -38,6 +38,10 @@ public class FriendsService {
         new AddFriendTask().execute(user);
     }
 
+    public void deleteFriend(Friends friends) {
+        new DeleteFriendTask().execute(friends);
+    }
+
     class GetFriendsTask extends AsyncTask<Integer, Void, List<FriendWithFriendshipId>> {
 
         @Override
@@ -100,6 +104,21 @@ public class FriendsService {
         @Override
         protected void onPostExecute(String msg) {
             communicator.refreshList(msg);
+        }
+    }
+
+    class DeleteFriendTask extends AsyncTask <Friends, Void, Void> {
+
+        @Override
+        protected Void doInBackground(Friends... friends) {
+            Database db = Database.getDatabaseInstance(context);
+            db.friendsDAO().deleteFriends(friends[0]);
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            communicator.refreshAfterDelete();
         }
     }
 }

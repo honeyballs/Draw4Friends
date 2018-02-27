@@ -36,6 +36,8 @@ public class ChallengeAdapter extends ArrayAdapter<Challenge> {
             convertView = LayoutInflater.from(getContext()).inflate(R.layout.challenge_listitem, parent, false);
         }
 
+        TextView opponentName = convertView.findViewById(R.id.opponentNameView);
+        opponentName.setText(challenge.getOpponentName());
         TextView turn = convertView.findViewById(R.id.turnView);
         if (challenge.getTurnOff() == userId) {
             turn.setText(R.string.turn_draw);

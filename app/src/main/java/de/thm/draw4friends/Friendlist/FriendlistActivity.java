@@ -16,6 +16,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -35,10 +36,9 @@ import de.thm.draw4friends.Server.ServiceFacade;
 public class FriendlistActivity extends AppCompatActivity implements FriendlistCommunicator {
 
     private User user;
-    private ArrayAdapter<String> adapter;
+    private FriendListAdapter adapter;
 
-    private List<FriendWithFriendshipId> fwfidArr = new ArrayList<>();
-    private List<String> friends = new ArrayList<>();
+    private List<FriendWithFriendshipId> friends = new ArrayList<>();
 
     private ServiceFacade serviceFacade;
 
@@ -62,8 +62,9 @@ public class FriendlistActivity extends AppCompatActivity implements FriendlistC
 
         // Fill List with Data
         ListView friendListView = findViewById(R.id.listViewFriends);
-        adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, friends);
+        adapter = new FriendListAdapter(this, friends);
         friendListView.setAdapter(adapter);
+        friendListView.setOnItemLongClickListener(new FriendDeleteListener());
 
         FloatingActionButton fab = findViewById(R.id.addFriendButton);
         fab.setOnClickListener(new FABListener());
@@ -89,10 +90,8 @@ public class FriendlistActivity extends AppCompatActivity implements FriendlistC
     @Override
     public void setFriendList(List<FriendWithFriendshipId> friendList) {
         friends.clear();
-        for (FriendWithFriendshipId obj : friendList) {
-            friends.add(obj.getUsername());
-        }
-        adapter.notifyDataSetChanged();
+        friends = friendList;
+        adapter.addAll(friendList);
     }
 
     @Override
@@ -100,9 +99,16 @@ public class FriendlistActivity extends AppCompatActivity implements FriendlistC
         if (msg != null) {
             Toast.makeText(FriendlistActivity.this, msg,Toast.LENGTH_SHORT).show();
             if (msg.equals("You are friends now")) {
+                friends.clear();
                 serviceFacade.getFriends(user.getUId());
             }
         }
+    }
+
+    @Override
+    public void refreshAfterDelete() {
+        friends.clear();
+        serviceFacade.getFriends(user.getUId());
     }
 
     class FABListener implements View.OnClickListener {
@@ -111,9 +117,12 @@ public class FriendlistActivity extends AppCompatActivity implements FriendlistC
             Log.d("info", "add btn pressed");
             AlertDialog.Builder builder = new AlertDialog.Builder(FriendlistActivity.this);
             builder.setTitle("Add friend");
-            View viewInflated = LayoutInflater.from(FriendlistActivity.this).inflate(R.layout.friend_add_frame_layout, (ViewGroup) findViewById(android.R.id.content), false);
+            View viewInflated = LayoutInflater.from(FriendlistActivity.this).inflate(R.layout.textfield_dialog_layout, null);
 
-            final EditText input = viewInflated.findViewById(R.id.input);
+            final TextView message = viewInflated.findViewById(R.id.dialogTextView);
+            message.setText(R.string.search_friend);
+            final EditText input = viewInflated.findViewById(R.id.dialogEditText);
+            input.setHint(R.string.username);
             builder.setView(viewInflated);
 
             // Set up the buttons
@@ -137,5 +146,37 @@ public class FriendlistActivity extends AppCompatActivity implements FriendlistC
             builder.show();
         }
 
+    }
+
+
+
+    class FriendDeleteListener implements AdapterView.OnItemLongClickListener {
+
+        @Override
+        public boolean onItemLongClick(AdapterView<?> parent, View view, final int position, long id) {
+
+            AlertDialog.Builder builder = new AlertDialog.Builder(FriendlistActivity.this);
+            builder.setTitle(R.string.delete_friend);
+            builder.setMessage(getString(R.string.delete_friend_sure) + " " + friends.get(position).getUsername() + "?");
+            builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    Friends friendsToDelete = new Friends();
+                    friendsToDelete.setFriendsid(friends.get(position).getFriendshipId());
+                    serviceFacade.deleteFriend(friendsToDelete);
+                }
+            });
+
+            builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.dismiss();
+                }
+            });
+
+            builder.show();
+
+            return true;
+        }
     }
 }

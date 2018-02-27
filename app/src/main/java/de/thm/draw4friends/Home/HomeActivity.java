@@ -104,7 +104,6 @@ public class HomeActivity extends AppCompatActivity implements HomeCommunicator 
     protected void onResume() {
         super.onResume();
         friends.clear();
-        serviceFacade.getChallenges(user.getUId());
         serviceFacade.getFriendsForChallenges(user.getUId());
     }
 
@@ -142,6 +141,7 @@ public class HomeActivity extends AppCompatActivity implements HomeCommunicator 
     @Override
     public void setFriends(List<FriendWithFriendshipId> friends) {
         this.friends = friends;
+        serviceFacade.getChallenges(user.getUId());
     }
 
     @Override
