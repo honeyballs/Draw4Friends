@@ -23,6 +23,11 @@
     <string name="search_friend">Search for a friend by looking for their username.</string>
     <string name="delete_friend">Delete friend</string>
     <string name="delete_friend_sure">Are you sure you want to delete this friend: </string>
+    <string name="cancel_drawing">Cancel drawing</string>
+    <string name="cancel_drawing_msg">If you just started a new challenge the challenge will not be created.</string>
+    <string name="enter_word">Word to draw</string>
+    <string name="enter_word_hint">Enter the word you want to draw.</string>
+    <string name="word">Word</string>
 
     <!-- Keys -->
     <string name="login_token">token</string>

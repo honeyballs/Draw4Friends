@@ -1,15 +1,20 @@
 package de.thm.draw4friends.Paint;
 
+import android.content.DialogInterface;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.TextView;
 
 import de.thm.draw4friends.R;
 
@@ -81,7 +86,23 @@ public class PaintCanvasActivity extends AppCompatActivity {
 
     @Override
     public boolean onSupportNavigateUp() {
-        onBackPressed();
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle(R.string.cancel_drawing);
+        builder.setMessage(R.string.cancel_drawing_msg);
+        builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                onBackPressed();
+            }
+        });
+        builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+        builder.show();
+
         return true;
     }
 
@@ -90,6 +111,35 @@ public class PaintCanvasActivity extends AppCompatActivity {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.paint_menu, menu);
         return true;
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        //TODO: Check if word is already set
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle(R.string.enter_word);
+        View dialogView = LayoutInflater.from(this).inflate(R.layout.textfield_dialog_layout, null);
+        final TextView textView = dialogView.findViewById(R.id.dialogTextView);
+        textView.setText(R.string.enter_word_hint);
+        final EditText wordText = dialogView.findViewById(R.id.dialogEditText);
+        wordText.setHint(R.string.word);
+        builder.setView(dialogView);
+        builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                //TODO: Save word in drawing instance
+            }
+        });
+        builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+                onSupportNavigateUp();
+            }
+        });
+        builder.show();
+
     }
 
     private String getColorString(Integer color) {
