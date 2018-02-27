@@ -42,10 +42,15 @@ public class PaintCanvasActivity extends AppCompatActivity {
         customCanvas = (CanvasView) findViewById(R.id.signature_canvas);
         currentColor = new SubjectColor(getColorString(ContextCompat.getColor(this, R.color.black)));
 
+        ToolButtonListener toolButtonListener = new ToolButtonListener();
         this.brushButton = findViewById(R.id.brushTool);
+        this.brushButton.setOnClickListener(toolButtonListener);
         this.circleButton = findViewById(R.id.circleTool);
+        this.circleButton.setOnClickListener(toolButtonListener);
         this.squareButton = findViewById(R.id.squareTool);
+        this.squareButton.setOnClickListener(toolButtonListener);
         this.undoButton = findViewById(R.id.undoButton);
+        this.undoButton.setOnClickListener(toolButtonListener);
 
         this.colorText = findViewById(R.id.colorTextView);
 
@@ -100,33 +105,59 @@ public class PaintCanvasActivity extends AppCompatActivity {
 
         @Override
         public void onClick(View v) {
+            int color;
             switch (v.getId()) {
                 case R.id.colorBlack:
-                    currentColor.setColor(getColorString(ContextCompat.getColor(PaintCanvasActivity.this, R.color.black)));
+                    color = ContextCompat.getColor(PaintCanvasActivity.this, R.color.black);
                     break;
                 case R.id.colorWhite:
-                    currentColor.setColor(getColorString(ContextCompat.getColor(PaintCanvasActivity.this, R.color.white)));
+                    color = ContextCompat.getColor(PaintCanvasActivity.this, R.color.white);
                     break;
                 case R.id.colorBlue:
-                    currentColor.setColor(getColorString(ContextCompat.getColor(PaintCanvasActivity.this, R.color.blue)));
+                    color = ContextCompat.getColor(PaintCanvasActivity.this, R.color.blue);
                     break;
                 case R.id.colorRed:
-                    currentColor.setColor(getColorString(ContextCompat.getColor(PaintCanvasActivity.this, R.color.red)));
+                    color = ContextCompat.getColor(PaintCanvasActivity.this, R.color.red);
                     break;
                 case R.id.colorYellow:
-                    currentColor.setColor(getColorString(ContextCompat.getColor(PaintCanvasActivity.this, R.color.yellow)));
+                    color = ContextCompat.getColor(PaintCanvasActivity.this, R.color.yellow);
                     break;
                 case R.id.colorGreen:
-                    currentColor.setColor(getColorString(ContextCompat.getColor(PaintCanvasActivity.this, R.color.green)));
+                    color = ContextCompat.getColor(PaintCanvasActivity.this, R.color.green);
                     break;
                 case R.id.colorBrown:
-                    currentColor.setColor(getColorString(ContextCompat.getColor(PaintCanvasActivity.this, R.color.brown)));
+                    color = ContextCompat.getColor(PaintCanvasActivity.this, R.color.brown);
                     break;
                 case R.id.colorSkin:
-                    currentColor.setColor(getColorString(ContextCompat.getColor(PaintCanvasActivity.this, R.color.skin)));
+                    color = ContextCompat.getColor(PaintCanvasActivity.this, R.color.skin);
                     break;
                 default:
+                    color = ContextCompat.getColor(PaintCanvasActivity.this, R.color.black);
                     Log.e("DEFAULT ", "what");
+            }
+            currentColor.setColor(getColorString(color));
+            customCanvas.setColor(color);
+        }
+    }
+
+    class ToolButtonListener implements View.OnClickListener {
+
+        @Override
+        public void onClick(View v){
+            switch (v.getId()) {
+                case R.id.brushTool:
+                    customCanvas.changeTool(0);
+                    break;
+                case R.id.circleTool:
+                    customCanvas.changeTool(1);
+                    break;
+                case R.id.squareTool:
+                    customCanvas.changeTool(2);
+                    break;
+                case R.id.undoButton:
+                    break;
+                default:
+                    break;
             }
         }
     }
