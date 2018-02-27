@@ -6,6 +6,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.View;
+import android.widget.ImageButton;
 
 import de.thm.draw4friends.R;
 
@@ -15,6 +16,12 @@ import de.thm.draw4friends.R;
 
 public class PaintCanvasActivity extends AppCompatActivity {
     private CanvasView customCanvas;
+
+    //Tools
+    private ImageButton brushButton, circleButton, squareButton, undoButton;
+
+    //Colors
+    private ImageButton blackButton, whiteButton, redButton, yellowButton, greenButton, blueButton, brownButton, skinButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,6 +33,20 @@ public class PaintCanvasActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         customCanvas = (CanvasView) findViewById(R.id.signature_canvas);
+
+        this.brushButton = findViewById(R.id.brushTool);
+        this.circleButton = findViewById(R.id.circleTool);
+        this.squareButton = findViewById(R.id.squareTool);
+        this.undoButton = findViewById(R.id.undoButton);
+
+        this.blackButton = findViewById(R.id.colorBlack);
+        this.whiteButton = findViewById(R.id.colorWhite);
+        this.redButton = findViewById(R.id.colorRed);
+        this.yellowButton = findViewById(R.id.colorYellow);
+        this.greenButton = findViewById(R.id.colorGreen);
+        this.blueButton = findViewById(R.id.colorBlue);
+        this.brownButton = findViewById(R.id.colorBrown);
+        this.skinButton = findViewById(R.id.colorSkin);
     }
 
     @Override

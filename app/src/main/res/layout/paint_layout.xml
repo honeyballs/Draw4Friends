@@ -1,7 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:custom="http://schemas.android.com/apk/res-auto"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#FFFFFF"
@@ -9,19 +7,207 @@
 
     <include layout="@layout/toolbar"/>
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:background="#d3d3d3">
+
+        <ImageButton
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_margin="10dp"
+            android:layout_weight="1"
+            android:id="@+id/brushTool"
+            android:src="@drawable/ic_brush_black_24dp"
+            android:background="?android:selectableItemBackground"/>
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_weight="1"/>
+
+        <ImageButton
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_margin="10dp"
+            android:layout_weight="1"
+            android:id="@+id/circleTool"
+            android:src="@drawable/ic_fiber_manual_record_black_24dp"
+            android:background="?android:selectableItemBackground"/>
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_weight="1"/>
+
+        <ImageButton
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_margin="10dp"
+            android:layout_weight="1"
+            android:id="@+id/squareTool"
+            android:src="@drawable/ic_stop_black_24dp"
+            android:background="?android:selectableItemBackground"/>
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_weight="1"/>
+
+        <ImageButton
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_margin="10dp"
+            android:layout_weight="1"
+            android:id="@+id/undoButton"
+            android:src="@drawable/ic_undo_black_24dp"
+            android:background="?android:selectableItemBackground"/>
+
+    </LinearLayout>
+
     <de.thm.draw4friends.Paint.CanvasView
         android:id="@+id/signature_canvas"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
         android:textColor="#FFFFFF"
-        android:layout_marginTop="?attr/actionBarSize"/>
+        />
 
-    <Button
-        android:id="@+id/button1"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="bottom|center"
-        android:onClick="clearCanvas"
-        android:text="Clear Canvas" />
+        android:orientation="horizontal"
+        android:background="#d3d3d3">
 
-</FrameLayout>
+        <ImageButton
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_margin="10dp"
+            android:layout_weight="1"
+            android:id="@+id/colorBlack"
+            android:src="@drawable/ic_stop_black_24dp"
+            android:tint="@color/black"
+            android:background="?android:selectableItemBackground"/>
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_weight="1"/>
+
+        <ImageButton
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_margin="10dp"
+            android:layout_weight="1"
+            android:id="@+id/colorWhite"
+            android:src="@drawable/ic_stop_black_24dp"
+            android:tint="@color/white"
+            android:background="?android:selectableItemBackground"/>
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_weight="1"/>
+
+        <ImageButton
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_margin="10dp"
+            android:layout_weight="1"
+            android:id="@+id/colorRed"
+            android:src="@drawable/ic_stop_black_24dp"
+            android:tint="@color/red"
+            android:background="?android:selectableItemBackground"/>
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_weight="1"/>
+
+        <ImageButton
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_margin="10dp"
+            android:layout_weight="1"
+            android:id="@+id/colorYellow"
+            android:src="@drawable/ic_stop_black_24dp"
+            android:tint="@color/yellow"
+            android:background="?android:selectableItemBackground"/>
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_weight="1"/>
+
+        <ImageButton
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_margin="10dp"
+            android:layout_weight="1"
+            android:id="@+id/colorGreen"
+            android:src="@drawable/ic_stop_black_24dp"
+            android:tint="@color/green"
+            android:background="?android:selectableItemBackground"/>
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_weight="1"/>
+
+        <ImageButton
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_margin="10dp"
+            android:layout_weight="1"
+            android:id="@+id/colorBlue"
+            android:src="@drawable/ic_stop_black_24dp"
+            android:tint="@color/blue"
+            android:background="?android:selectableItemBackground"/>
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_weight="1"/>
+
+        <ImageButton
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_margin="10dp"
+            android:layout_weight="1"
+            android:id="@+id/colorBrown"
+            android:src="@drawable/ic_stop_black_24dp"
+            android:tint="@color/brown"
+            android:background="?android:selectableItemBackground"/>
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_weight="1"/>
+
+        <ImageButton
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_margin="10dp"
+            android:layout_weight="1"
+            android:id="@+id/colorSkin"
+            android:src="@drawable/ic_stop_black_24dp"
+            android:tint="@color/skin"
+            android:background="?android:selectableItemBackground"/>
+
+
+    </LinearLayout>
+
+</LinearLayout>

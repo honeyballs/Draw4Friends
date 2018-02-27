@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item android:id="@+id/start_challenge"
-        android:icon="@drawable/ic_people_white_24dp"
+        android:icon="@drawable/ic_send_white_24dp"
         android:title="@string/start_challenge"
         app:showAsAction="always" />
 </menu>
