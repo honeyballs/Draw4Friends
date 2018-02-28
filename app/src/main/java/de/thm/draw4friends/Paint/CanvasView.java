@@ -1,5 +1,6 @@
 package de.thm.draw4friends.Paint;
 
+import android.util.Log;
 import android.view.MotionEvent;
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -9,6 +10,9 @@ import android.graphics.Paint;
 import android.graphics.Path;
 import android.util.AttributeSet;
 import android.view.View;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import de.thm.draw4friends.Model.PaintCommand;
 import de.thm.draw4friends.Model.PaintCommandCirc;
@@ -21,12 +25,19 @@ import de.thm.draw4friends.Model.PaintCommandRect;
 
 public class CanvasView extends View {
 
+    public static final int PAINTCOMMAND_PATH = 0;
+    public static final int PAINTCOMMAND_CIRC = 1;
+    public static final int PAINTCOMMAND_RECT = 2;
+
     private Bitmap mBitmap;
     private Canvas mCanvas;
     Context context;
     private Paint paint;
-
+    private int color;
     private PaintCommand pc;
+    private List<PaintCommand> commandList;
+    private int activeTool;
+
 
     public CanvasView(Context c, AttributeSet attrs) {
         super(c, attrs);
@@ -34,28 +45,32 @@ public class CanvasView extends View {
 
         paint = new Paint();
         paint.setAntiAlias(true);
-        paint.setColor(Color.BLACK);
-        paint.setStyle(Paint.Style.STROKE);
         paint.setStrokeJoin(Paint.Join.ROUND);
         paint.setStrokeWidth(4f);
 
-        pc = new PaintCommandPath(paint);
+        color = Color.BLACK;
+
+        pc = new PaintCommandPath(paint, color);
+
+        commandList = new ArrayList<>();
     }
 
     public void setColor(int color) {
-        paint.setColor(color);
+        this.color = color;
+        changeTool(activeTool);
     }
 
     public void changeTool(int tool) {
+        activeTool = tool;
         switch (tool){
-            case 0:
-                pc = new PaintCommandPath(paint);
+            case PAINTCOMMAND_PATH:
+                pc = new PaintCommandPath(paint, color);
                 break;
-            case 1:
-                pc = new PaintCommandCirc(paint);
+            case PAINTCOMMAND_CIRC:
+                pc = new PaintCommandCirc(paint, color);
                 break;
-            case 2:
-                pc = new PaintCommandRect(paint);
+            case PAINTCOMMAND_RECT:
+                pc = new PaintCommandRect(paint, color);
                 break;
             default:
                 break;
@@ -74,7 +89,9 @@ public class CanvasView extends View {
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
-        pc.draw(canvas);
+        repaintCommandList();
+        pc.draw(mCanvas);
+        canvas.drawBitmap(mBitmap, 0, 0, null);
     }
 
     public void clearCanvas() {
@@ -98,9 +115,32 @@ public class CanvasView extends View {
                 break;
             case MotionEvent.ACTION_UP:
                 pc.upTouch();
+                commandList.add(pc);
                 invalidate();
+                changeTool(activeTool);
                 break;
         }
         return true;
+    }
+
+    public boolean undoPaintCommand() {
+        if (undoAvailable()){
+            commandList.remove(commandList.size() - 1);
+            repaintCommandList();
+            return true;
+        }
+        return false;
+    }
+
+    public boolean undoAvailable() {
+        if (commandList.size() > 0) return true;
+        return false;
+    }
+
+    private void repaintCommandList() {
+        mCanvas.drawColor(Color.WHITE);
+        for (PaintCommand command: commandList) {
+            command.draw(mCanvas);
+        }
     }
 }

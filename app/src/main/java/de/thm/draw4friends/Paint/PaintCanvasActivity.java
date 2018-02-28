@@ -11,6 +11,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -45,6 +46,8 @@ public class PaintCanvasActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         customCanvas = (CanvasView) findViewById(R.id.signature_canvas);
+        CanvasListener canvasListener = new CanvasListener();
+        customCanvas.setOnTouchListener(canvasListener);
         currentColor = new SubjectColor(getColorString(ContextCompat.getColor(this, R.color.black)));
 
         ToolButtonListener toolButtonListener = new ToolButtonListener();
@@ -56,6 +59,7 @@ public class PaintCanvasActivity extends AppCompatActivity {
         this.squareButton.setOnClickListener(toolButtonListener);
         this.undoButton = findViewById(R.id.undoButton);
         this.undoButton.setOnClickListener(toolButtonListener);
+        this.undoButton.setEnabled(false);
 
         this.colorText = findViewById(R.id.colorTextView);
 
@@ -196,19 +200,33 @@ public class PaintCanvasActivity extends AppCompatActivity {
         public void onClick(View v){
             switch (v.getId()) {
                 case R.id.brushTool:
-                    customCanvas.changeTool(0);
+                    customCanvas.changeTool(CanvasView.PAINTCOMMAND_PATH);
                     break;
                 case R.id.circleTool:
-                    customCanvas.changeTool(1);
+                    customCanvas.changeTool(CanvasView.PAINTCOMMAND_CIRC);
                     break;
                 case R.id.squareTool:
-                    customCanvas.changeTool(2);
+                    customCanvas.changeTool(CanvasView.PAINTCOMMAND_RECT);
                     break;
                 case R.id.undoButton:
+                    customCanvas.undoPaintCommand();
+                    undoButton.setEnabled(customCanvas.undoAvailable());
                     break;
                 default:
                     break;
             }
         }
+    }
+
+    class CanvasListener implements View.OnTouchListener {
+
+        @Override
+        public boolean onTouch(View v, MotionEvent me) {
+            if (me.getAction() == MotionEvent.ACTION_UP) {
+                undoButton.setEnabled(true);
+            }
+            return false;
+        }
+
     }
 }

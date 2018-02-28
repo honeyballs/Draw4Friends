@@ -8,18 +8,9 @@ import android.graphics.Paint;
  */
 
 public abstract class PaintCommand {
+    public static final float TOLERANCE = 5;
 
     public void draw(Canvas canvas){}
-
-    public Paint newPaint(int color){
-        Paint paint = new Paint();
-        paint.setAntiAlias(true);
-        paint.setColor(color);
-        paint.setStyle(Paint.Style.STROKE);
-        paint.setStrokeJoin(Paint.Join.ROUND);
-        paint.setStrokeWidth(4f);
-        return paint;
-    }
 
     // when ACTION_DOWN start touch according to the x,y values
     public void startTouch(float x, float y) {

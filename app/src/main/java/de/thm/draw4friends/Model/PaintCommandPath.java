@@ -12,16 +12,19 @@ public class PaintCommandPath extends PaintCommand {
 
     private Path path;
     private Paint paint;
+    private int color;
     private float mX, mY;
-    private static final float TOLERANCE = 5;
 
-    public PaintCommandPath(Paint paint){
+    public PaintCommandPath(Paint paint, int color){
         path = new Path();
         this.paint = paint;
+        this.color = color;
     }
 
     @Override
     public void draw(Canvas canvas){
+        paint.setColor(color);
+        paint.setStyle(Paint.Style.STROKE);
         canvas.drawPath(path, paint);
     }
 

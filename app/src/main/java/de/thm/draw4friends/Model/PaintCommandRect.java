@@ -10,24 +10,25 @@ import android.graphics.Paint;
 public class PaintCommandRect extends PaintCommand {
 
     private Paint paint;
-    private float initX;
-    private float initY;
-    private float mX, mY;
-    private static final float TOLERANCE = 5;
+    private float initX, initY, mX, mY;
+    private int color;
 
-    public PaintCommandRect(Paint paint){
+    public PaintCommandRect(Paint paint, int color){
         this.paint = paint;
+        this.color = color;
     }
 
     @Override
     public void draw(Canvas canvas){
+        paint.setColor(color);
+        paint.setStyle(Paint.Style.FILL);
         canvas.drawRect(initX,initY,mX,mY,paint);
     }
 
     @Override
     public void startTouch(float x, float y) {
-        initX = x;
-        initY = y;
+        initX = mX = x;
+        initY = mY = y;
     }
 
     @Override
