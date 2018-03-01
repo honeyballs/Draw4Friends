@@ -73,4 +73,12 @@ public class ServiceFacade {
         new FriendsService(communicator).deleteFriend(friends);
     }
 
+    /**
+     * Everything Painting related.
+     */
+
+    public void getPainting(int challengeId) {
+
+    }
+
 }

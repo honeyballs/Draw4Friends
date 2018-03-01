@@ -1,7 +1,6 @@
 package de.thm.draw4friends.Model;
 
 import android.graphics.Canvas;
-import android.graphics.Paint;
 
 /**
  * Created by yannikstenzel on 27.02.18.

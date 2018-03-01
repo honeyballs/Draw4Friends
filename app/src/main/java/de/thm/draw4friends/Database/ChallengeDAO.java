@@ -36,6 +36,4 @@ public interface ChallengeDAO {
     @Query("SELECT username, uId from users INNER JOIN challenges ON users.uId = challenges.opponent WHERE challenges.player = :userId")
     public User getOpponent(int userId);
 
-    //TODO: Drawing Gelöt
-
 }

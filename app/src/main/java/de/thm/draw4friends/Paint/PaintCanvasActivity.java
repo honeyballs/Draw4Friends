@@ -17,13 +17,14 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
+import de.thm.draw4friends.Model.Painting;
 import de.thm.draw4friends.R;
 
 /**
  * Created by yannikstenzel on 27.02.18.
  */
 
-public class PaintCanvasActivity extends AppCompatActivity {
+public class PaintCanvasActivity extends AppCompatActivity implements PaintCommunicator {
     private CanvasView customCanvas;
 
     //Tools
@@ -227,6 +228,16 @@ public class PaintCanvasActivity extends AppCompatActivity {
             }
             return false;
         }
+
+    }
+
+    @Override
+    public void setData(Object obj) {
+
+    }
+
+    @Override
+    public void loadPainting(Painting painting) {
 
     }
 }
