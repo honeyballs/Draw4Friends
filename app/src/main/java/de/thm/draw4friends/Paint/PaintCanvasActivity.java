@@ -1,8 +1,8 @@
 package de.thm.draw4friends.Paint;
 
 import android.content.DialogInterface;
-import android.graphics.Color;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -11,20 +11,28 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import de.thm.draw4friends.Model.Challenge;
 import de.thm.draw4friends.Model.Painting;
 import de.thm.draw4friends.R;
+import de.thm.draw4friends.Server.ServiceFacade;
+
+import static java.lang.Math.toIntExact;
 
 /**
  * Created by yannikstenzel on 27.02.18.
  */
 
 public class PaintCanvasActivity extends AppCompatActivity implements PaintCommunicator {
+
+    private Challenge challenge;
     private CanvasView customCanvas;
 
     //Tools
@@ -37,9 +45,15 @@ public class PaintCanvasActivity extends AppCompatActivity implements PaintCommu
 
     private SubjectColor currentColor;
 
+    private Painting currentPainting;
+    private ServiceFacade serviceFacade;
+
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        this.serviceFacade = new ServiceFacade(this);
+
         setContentView(R.layout.paint_layout);
 
         Toolbar toolbar = findViewById(R.id.toolbar);
@@ -87,6 +101,13 @@ public class PaintCanvasActivity extends AppCompatActivity implements PaintCommu
         this.brownButton.setOnClickListener(colorButtonListener);
         this.skinButton = findViewById(R.id.colorSkin);
         this.skinButton.setOnClickListener(colorButtonListener);
+
+        Bundle bundle = getIntent().getExtras();
+        if (bundle != null) {
+            challenge = bundle.getParcelable(getString(R.string.challenge_obj));
+        }
+
+        currentPainting = new Painting();
     }
 
     @Override
@@ -119,6 +140,32 @@ public class PaintCanvasActivity extends AppCompatActivity implements PaintCommu
     }
 
     @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.start_challenge:
+                AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                builder.setTitle(R.string.startChallenge);
+                builder.setMessage(R.string.startChallengeMsg);
+                builder.setPositiveButton(R.string.startChallengeSubmit, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        currentPainting.setPaintCommandListString(customCanvas.getCommandList());
+                        serviceFacade.createChallenge(challenge);
+                    }
+                });
+                builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                });
+                builder.show();
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
+    @Override
     protected void onResume() {
         super.onResume();
         //TODO: Check if word is already set
@@ -134,6 +181,7 @@ public class PaintCanvasActivity extends AppCompatActivity implements PaintCommu
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 //TODO: Save word in drawing instance
+                currentPainting.setDescription(wordText.getText().toString());
             }
         });
         builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
@@ -236,8 +284,27 @@ public class PaintCanvasActivity extends AppCompatActivity implements PaintCommu
 
     }
 
-    @Override
-    public void loadPainting(Painting painting) {
+//    @Override
+//    public void getPainting(Painting painting) {
+//
+//    }
 
+    @Override
+    public void setChallengeIdAndPainting(long id) {
+        challenge.setId(toIntExact(id));
+        currentPainting.setChallengeId(challenge.getId());
+        serviceFacade.setPainting(currentPainting);
+    }
+//
+//    @Override
+//    public void setPainting() {
+//        currentPainting.setChallengeId(challenge.getId());
+//        serviceFacade.setPainting(currentPainting);
+//    }
+
+    @Override
+    public void notifyChallengeStarted() {
+        Toast.makeText(PaintCanvasActivity.this, R.string.challengeStarted, Toast.LENGTH_LONG).show();
+        onBackPressed();
     }
 }

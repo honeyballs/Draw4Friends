@@ -1,7 +1,9 @@
 package de.thm.draw4friends.Server;
 
+import de.thm.draw4friends.Model.Challenge;
 import de.thm.draw4friends.Model.Communicator;
 import de.thm.draw4friends.Model.Friends;
+import de.thm.draw4friends.Model.Painting;
 import de.thm.draw4friends.Model.User;
 
 /**
@@ -45,10 +47,6 @@ public class ServiceFacade {
         new HomeService(communicator).getFriends(uId);
     }
 
-    public void createChallenge(User user) {
-        new HomeService(communicator).createChallenge(user);
-    }
-
     public void deleteAllChallengesOfUser(int uId) {
         new HomeService(communicator).deleteAllChallengesOfUser(uId);
     }
@@ -79,6 +77,14 @@ public class ServiceFacade {
 
     public void getPainting(int challengeId) {
 
+    }
+
+    public void setPainting(Painting painting) {
+        new PaintingService(communicator).setPainting(painting);
+    }
+
+    public void createChallenge(Challenge challenge) {
+        new PaintingService(communicator).createChallenge(challenge);
     }
 
 }

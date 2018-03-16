@@ -32,7 +32,7 @@ public interface PaintingDAO {
     @Delete
     public int deletePaintings(List<Painting> paintings);
 
-   @Query("SELECT * FROM paintings WHERE challengeId LIKE :challengeId")
+    @Query("SELECT * FROM paintings WHERE challengeId LIKE :challengeId")
     public List<Painting> getPaintingForChallenge(int challengeId);
 
 }

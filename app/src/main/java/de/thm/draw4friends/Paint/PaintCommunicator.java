@@ -9,5 +9,11 @@ import de.thm.draw4friends.Model.Painting;
 
 public interface PaintCommunicator extends Communicator {
 
-    void loadPainting(Painting painting);
+//    void getPainting(Painting painting);
+
+//    void setPainting();
+
+    void setChallengeIdAndPainting(long id);
+
+    void notifyChallengeStarted();
 }

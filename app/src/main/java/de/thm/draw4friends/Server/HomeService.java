@@ -43,10 +43,6 @@ public class HomeService {
         new GetIdOfOpponentTask().execute(username);
     }
 
-    public void createChallenge(User user) {
-        new CreateChallengeTask().execute(user);
-    }
-
     public void deleteAllChallengesOfUser(int uId) {
         new DeleteAllChallengesOfUserTask().execute(uId);
     }
@@ -76,24 +72,6 @@ public class HomeService {
         }
     }
 
-    class CreateChallengeTask extends AsyncTask<User, Void, Void> {
-
-        @Override
-        protected Void doInBackground(User... users) {
-            Database db = Database.getDatabaseInstance(context);
-            User opponent = db.userDAO().findUser(users[0].getUsername());
-            Challenge challenge = new Challenge();
-            challenge.setPlayer(users[0].getUId());
-            challenge.setOpponent(opponent.getUId());
-            challenge.setTurnOff(users[0].getUId());
-            db.challengeDAO().insertChallenge(challenge);
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(Void aVoid) {
-        }
-    }
 
     class GetChallengesTask extends AsyncTask<Integer, Void, List<Challenge>> {
 

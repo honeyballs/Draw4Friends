@@ -58,6 +58,10 @@ public class CanvasView extends View {
         changeTool(activeTool);
     }
 
+    public List<PaintCommand> getCommandList() {
+        return commandList;
+    }
+
     public void changeTool(int tool) {
         activeTool = tool;
         switch (tool){

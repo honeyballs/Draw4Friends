@@ -46,6 +46,10 @@
     <string name="green">green</string>
     <string name="brown">brown</string>
     <string name="pink">pink</string>
+    <string name="challengeStarted">Challenge successfully started.</string>
+    <string name="startChallenge">Start Challenge</string>
+    <string name="startChallengeMsg">Is your painting finished?</string>
+    <string name="startChallengeSubmit">Start Challenge!</string>
 
 
 </resources>

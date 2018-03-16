@@ -72,7 +72,7 @@ public class HomeActivity extends AppCompatActivity implements HomeCommunicator 
         }
 
         //TODO: Remove this, only for testing
-        serviceFacade.deleteAllChallengesOfUser(user.getUId());
+        //serviceFacade.deleteAllChallengesOfUser(user.getUId());
 
         this.startChallengeButton = findViewById(R.id.startChallengeButton);
         this.startChallengeButton.setOnClickListener(new ChallengeButtonListener());
