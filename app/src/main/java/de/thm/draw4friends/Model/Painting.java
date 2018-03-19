@@ -4,9 +4,17 @@ import android.arch.persistence.room.ColumnInfo;
 import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.ForeignKey;
 import android.arch.persistence.room.PrimaryKey;
+import android.graphics.Paint;
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.util.Log;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.reflect.TypeToken;
+
+import java.lang.reflect.Type;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -74,11 +82,27 @@ public class Painting implements Parcelable{
     }
 
     public List<PaintCommand> getPaintCommandLists() {
-        return GithubTypeConverters.stringToSomeObjectList(paintCommandListString);
+        //return GithubTypeConverters.stringToSomeObjectList(paintCommandListString);
+        RuntimeTypeAdapterFactory<PaintCommand> adapter = RuntimeTypeAdapterFactory
+                .of(PaintCommand.class)
+                .registerSubtype(PaintCommandPath.class)
+                .registerSubtype(PaintCommandCirc.class)
+                .registerSubtype(PaintCommandRect.class);
+        Type listType = new TypeToken<List<PaintCommand>>(){}.getType();
+        Gson gson = new GsonBuilder().registerTypeAdapterFactory(adapter).create();
+        return gson.fromJson(paintCommandListString, listType);
     }
 
     public void setPaintCommandListString(List<PaintCommand> paintCommandListString) {
-        this.paintCommandListString = GithubTypeConverters.someObjectListToString(paintCommandListString);
+        //this.paintCommandListString = GithubTypeConverters.someObjectListToString(paintCommandListString);
+        RuntimeTypeAdapterFactory<PaintCommand> adapter = RuntimeTypeAdapterFactory
+                .of(PaintCommand.class)
+                .registerSubtype(PaintCommandPath.class)
+                .registerSubtype(PaintCommandCirc.class)
+                .registerSubtype(PaintCommandRect.class);
+        Gson gson = new GsonBuilder().setPrettyPrinting().registerTypeAdapterFactory(adapter).create();
+        this.paintCommandListString = gson.toJson(paintCommandListString);
+        Log.e("Command Strings", this.paintCommandListString);
     }
 
 

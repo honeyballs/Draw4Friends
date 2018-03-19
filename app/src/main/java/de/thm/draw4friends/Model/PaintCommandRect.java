@@ -14,6 +14,7 @@ public class PaintCommandRect extends PaintCommand {
     private int color;
 
     public PaintCommandRect(Paint paint, int color){
+        super("PaintCommandRect");
         this.paint = paint;
         this.color = color;
     }

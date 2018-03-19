@@ -16,6 +16,7 @@ public class PaintCommandPath extends PaintCommand {
     private float mX, mY;
 
     public PaintCommandPath(Paint paint, int color){
+        super("PaintCommandPath");
         path = new Path();
         this.paint = paint;
         this.color = color;

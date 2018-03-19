@@ -33,29 +33,9 @@ public class PaintingService {
         new CreateChallengeTask().execute(challenge);
     }
 
-//    public void getPainting(int callengeid) {
-//        new GetPaintingsTask().execute(callengeid);
-//    }
-
     public void setPainting(Painting painting) {
         new SetPaintingsTask().execute(painting);
     }
-//
-//    class GetPaintingsTask extends AsyncTask<Integer, Void, List<Painting>> {
-//
-//        @Override
-//        protected List<Painting> doInBackground(Integer... integers) {
-//            List<Painting> paintings = new ArrayList<>();
-//            Database db = Database.getDatabaseInstance(context);
-//            paintings = db.paintingDAO().getPaintingForChallenge(integers[0]);
-//            return paintings;
-//        }
-//
-//        @Override
-//        protected void onPostExecute(List<Painting> paintingList) {
-//            communicator.getPainting(paintingList.get(0));
-//        }
-//    }
 
     class SetPaintingsTask extends AsyncTask<Painting, Void, Void> {
 

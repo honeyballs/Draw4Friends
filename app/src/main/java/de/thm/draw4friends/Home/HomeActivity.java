@@ -28,6 +28,7 @@ import java.util.List;
 
 import de.thm.draw4friends.Database.Database;
 import de.thm.draw4friends.Friendlist.FriendlistActivity;
+import de.thm.draw4friends.Guess.GuessActivity;
 import de.thm.draw4friends.Login.LoginActivity;
 import de.thm.draw4friends.Model.Challenge;
 import de.thm.draw4friends.Model.FriendWithFriendshipId;
@@ -210,8 +211,11 @@ public class HomeActivity extends AppCompatActivity implements HomeCommunicator 
                 Intent intent = new Intent(HomeActivity.this, PaintCanvasActivity.class);
                 intent.putExtra(getString(R.string.challenge_obj), challenge);
                 startActivity(intent);
+                //TODO: Check if painted already
             } else {
-                //TODO: Guess Activity
+                Intent intent = new Intent(HomeActivity.this, GuessActivity.class);
+                intent.putExtra(getString(R.string.challenge_obj), challenge);
+                startActivity(intent);
             }
         }
     }

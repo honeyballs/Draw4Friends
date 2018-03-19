@@ -20,6 +20,9 @@ android {
                 proguardFile 'proguard-rules.pro'
             }
         }
+        debugType {
+            debuggable true
+        }
     }
 }
 

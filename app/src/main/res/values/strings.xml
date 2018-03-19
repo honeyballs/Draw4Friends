@@ -28,6 +28,10 @@
     <string name="enter_word">Word to draw</string>
     <string name="enter_word_hint">Enter the word you want to draw.</string>
     <string name="word">Word</string>
+    <string name="guess_activity">Guess drawing</string>
+    <string name="pause">PAUSE</string>
+    <string name="start_timer">Start timer</string>
+    <string name="start_timer_msg">Press ok to start a timer and watch the painting. You got 60 seconds to watch the drawing and another 30 seconds afterwards to guess the right answer.</string>
 
     <!-- Keys -->
     <string name="login_token">token</string>

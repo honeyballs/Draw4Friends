@@ -14,6 +14,7 @@ public class PaintCommandCirc extends PaintCommand {
     private int color;
 
     public PaintCommandCirc(Paint paint, int color){
+        super("PaintCommandCirc");
         this.paint = paint;
         this.color = color;
     }

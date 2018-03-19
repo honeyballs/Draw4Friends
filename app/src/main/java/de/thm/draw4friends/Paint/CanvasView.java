@@ -51,6 +51,7 @@ public class CanvasView extends View {
         pc = new PaintCommandPath(paint, color);
 
         commandList = new ArrayList<>();
+
     }
 
     public void setColor(int color) {
@@ -139,10 +140,22 @@ public class CanvasView extends View {
         return false;
     }
 
-    private void repaintCommandList() {
+    public void repaintCommandList() {
         mCanvas.drawColor(Color.WHITE);
         for (PaintCommand command: commandList) {
             command.draw(mCanvas);
         }
+    }
+
+    public void addCommands(List<PaintCommand> commands) {
+        this.commandList.addAll(commands);
+    }
+
+    public void addCommand(PaintCommand command) {
+        this.commandList.add(command);
+    }
+
+    public void clearCommands() {
+        this.commandList.clear();
     }
 }
