@@ -2,6 +2,7 @@ package de.thm.draw4friends.Guess;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Paint;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
@@ -18,6 +19,7 @@ import java.util.List;
 
 import de.thm.draw4friends.Model.Challenge;
 import de.thm.draw4friends.Model.PaintCommand;
+import de.thm.draw4friends.Model.PaintCommandRect;
 import de.thm.draw4friends.Model.Painting;
 import de.thm.draw4friends.Paint.CanvasView;
 import de.thm.draw4friends.R;
@@ -113,6 +115,15 @@ public class GuessActivity extends AppCompatActivity implements GuessCommunicato
         canvasView.clearCanvas();
         canvasView.clearCommands();
         if (commandList != null && commandList.size() > 0) {
+
+            /*for (PaintCommand command : commandList) {
+                Log.e("Command: ", command.toString());
+                canvasView.addCommand(commandList.get(iterationCounter));
+                canvasView.repaintCommandList();
+            }*/
+            canvasView.addCommands(commandList);
+            canvasView.repaintCommandList();
+/*
             waitPerCommand = 60000/commandList.size();
             paintRunnable = new Runnable() {
                 @Override
@@ -125,7 +136,7 @@ public class GuessActivity extends AppCompatActivity implements GuessCommunicato
                     }
                 }
             };
-            paintRunnable.run();
+            paintRunnable.run();*/
         }
     }
 

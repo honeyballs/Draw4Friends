@@ -10,13 +10,16 @@ import android.graphics.Path;
 
 public class PaintCommandPath extends PaintCommand {
 
-    private Path path;
-    private Paint paint;
-    private int color;
-    private float mX, mY;
+    public Path path;
+    public Paint paint;
+    public int color;
+    public float mX, mY;
+
+    public PaintCommandPath() {
+
+    }
 
     public PaintCommandPath(Paint paint, int color){
-        super("PaintCommandPath");
         path = new Path();
         this.paint = paint;
         this.color = color;

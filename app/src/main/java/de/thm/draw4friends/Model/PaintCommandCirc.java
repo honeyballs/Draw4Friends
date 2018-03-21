@@ -9,12 +9,15 @@ import android.graphics.Paint;
 
 public class PaintCommandCirc extends PaintCommand {
 
-    private Paint paint;
-    private float initX, initY, mX, mY;
-    private int color;
+    public Paint paint;
+    public float initX, initY, mX, mY;
+    public int color;
+
+    public PaintCommandCirc() {
+
+    }
 
     public PaintCommandCirc(Paint paint, int color){
-        super("PaintCommandCirc");
         this.paint = paint;
         this.color = color;
     }

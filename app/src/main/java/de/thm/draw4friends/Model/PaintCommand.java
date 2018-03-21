@@ -6,13 +6,9 @@ import android.graphics.Canvas;
  * Created by yannikstenzel on 27.02.18.
  */
 
-public class PaintCommand {
+public abstract class PaintCommand {
     public static final float TOLERANCE = 5;
-    protected String type;
-
-    public PaintCommand(String type) {
-        this.type = type;
-    }
+    protected String type = getClass().getName();
 
     public void draw(Canvas canvas){}
 

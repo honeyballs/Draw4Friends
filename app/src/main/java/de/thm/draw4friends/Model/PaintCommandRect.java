@@ -9,12 +9,15 @@ import android.graphics.Paint;
 
 public class PaintCommandRect extends PaintCommand {
 
-    private Paint paint;
-    private float initX, initY, mX, mY;
-    private int color;
+    public Paint paint;
+    public float initX, initY, mX, mY;
+    public int color;
+
+    public PaintCommandRect() {
+
+    }
 
     public PaintCommandRect(Paint paint, int color){
-        super("PaintCommandRect");
         this.paint = paint;
         this.color = color;
     }
