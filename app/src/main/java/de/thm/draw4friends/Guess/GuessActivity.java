@@ -19,6 +19,7 @@ import java.util.List;
 
 import de.thm.draw4friends.Model.Challenge;
 import de.thm.draw4friends.Model.PaintCommand;
+import de.thm.draw4friends.Model.PaintCommandCirc;
 import de.thm.draw4friends.Model.PaintCommandRect;
 import de.thm.draw4friends.Model.Painting;
 import de.thm.draw4friends.Paint.CanvasView;
