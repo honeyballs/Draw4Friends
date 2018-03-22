@@ -10,8 +10,8 @@ import android.widget.Toast;
 
 import de.thm.draw4friends.Database.Database;
 import de.thm.draw4friends.Login.LoginActivity;
+import de.thm.draw4friends.Login.LoginCommunicator;
 import de.thm.draw4friends.Login.TokenGenerator;
-import de.thm.draw4friends.Model.Communicator;
 import de.thm.draw4friends.Model.User;
 import de.thm.draw4friends.R;
 
@@ -21,10 +21,10 @@ import de.thm.draw4friends.R;
 
 public class AccountService {
 
-    private Communicator communicator;
+    private LoginCommunicator communicator;
     private Context context;
 
-    public AccountService(Communicator communicator) {
+    public AccountService(LoginCommunicator communicator) {
         this.communicator = communicator;
         this.context = (AppCompatActivity) communicator;
     }

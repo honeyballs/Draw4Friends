@@ -19,6 +19,7 @@ public class User implements Parcelable {
     private String username;
     private String password;
     private String token;
+    private int score;
 
     public User () {
         super();
@@ -30,6 +31,7 @@ public class User implements Parcelable {
         username = in.readString();
         password = in.readString();
         token = in.readString();
+        score = in.readInt();
     }
 
     public int getUId() {
@@ -64,6 +66,14 @@ public class User implements Parcelable {
         this.token = token;
     }
 
+    public int getScore() {
+        return score;
+    }
+
+    public void setScore(int score) {
+        this.score = score;
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -75,6 +85,7 @@ public class User implements Parcelable {
         dest.writeString(username);
         dest.writeString(password);
         dest.writeString(token);
+        dest.writeInt(score);
     }
 
     public static final Parcelable.Creator<User> CREATOR = new Parcelable.Creator<User>() {

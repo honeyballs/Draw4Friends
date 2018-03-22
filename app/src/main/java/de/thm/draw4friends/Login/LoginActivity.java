@@ -17,16 +17,16 @@ import android.widget.Toast;
 
 import de.thm.draw4friends.Database.Database;
 import de.thm.draw4friends.Home.HomeActivity;
-import de.thm.draw4friends.Model.Communicator;
 import de.thm.draw4friends.Model.User;
 import de.thm.draw4friends.R;
+import de.thm.draw4friends.Server.AccountService;
 import de.thm.draw4friends.Server.ServiceFacade;
 
 /**
  * Created by Yannick Bals on 16.02.2018.
  */
 
-public class LoginActivity extends AppCompatActivity implements Communicator {
+public class LoginActivity extends AppCompatActivity implements LoginCommunicator {
 
     private static final String LOGIN_MODE = "LOGIN";
     private static final String REGISTER_MODE = "REGISTER";
@@ -40,16 +40,16 @@ public class LoginActivity extends AppCompatActivity implements Communicator {
     private EditText pwConfirmEdit;
     private Button loginButton;
 
-    private ServiceFacade serviceFacade;
+    private AccountService service;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        serviceFacade = new ServiceFacade(this);
+        service = new AccountService(this);
 
         //Try to login with the token
-        serviceFacade.loginWithToken();
+        service.loginWithToken();
 
         setContentView(R.layout.login_layout);
         this.headline = findViewById(R.id.loginHeadline);
@@ -101,9 +101,9 @@ public class LoginActivity extends AppCompatActivity implements Communicator {
         @Override
         public void onClick(View v) {
             if (mode.equals(LOGIN_MODE)) {
-                serviceFacade.loginUser(userEdit.getText().toString(), pwEdit.getText().toString());
+                service.loginUser(userEdit.getText().toString(), pwEdit.getText().toString());
             } else if (mode.equals(REGISTER_MODE)) {
-                serviceFacade.registerUser(userEdit.getText().toString(), pwEdit.getText().toString(), pwConfirmEdit.getText().toString());
+                service.registerUser(userEdit.getText().toString(), pwEdit.getText().toString(), pwConfirmEdit.getText().toString());
             }
         }
     }

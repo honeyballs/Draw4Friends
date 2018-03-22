@@ -27,19 +27,19 @@ public interface UserDAO {
     @Delete
     public int deleteUser(User user);
 
-    @Query("SELECT uId, username, token FROM users WHERE username LIKE :username AND password LIKE :password")
+    @Query("SELECT * FROM users WHERE username LIKE :username AND password LIKE :password")
     public User loginWithInfo(String username, String password);
 
-    @Query("SELECT uId, username FROM users WHERE token LIKE :token")
+    @Query("SELECT * FROM users WHERE token LIKE :token")
     public User loginWithToken(String token);
 
-    @Query("SELECT uId, username FROM users")
+    @Query("SELECT uId, username, score FROM users")
     public List<User> getUsers();
 
-    @Query("SELECT uId, username FROM users WHERE uId LIKE :uId")
+    @Query("SELECT uId, username, score FROM users WHERE uId LIKE :uId")
     public User getUserById(int uId);
 
-    @Query("SELECT uId, username FROM users WHERE username LIKE :username")
+    @Query("SELECT uId, username, score FROM users WHERE username LIKE :username")
     public User findUser(String username);
 
 }

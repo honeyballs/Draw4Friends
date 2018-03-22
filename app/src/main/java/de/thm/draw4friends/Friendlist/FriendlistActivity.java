@@ -27,6 +27,7 @@ import de.thm.draw4friends.Model.FriendWithFriendshipId;
 import de.thm.draw4friends.Model.Friends;
 import de.thm.draw4friends.R;
 import de.thm.draw4friends.Model.User;
+import de.thm.draw4friends.Server.FriendsService;
 import de.thm.draw4friends.Server.ServiceFacade;
 
 /**
@@ -40,13 +41,13 @@ public class FriendlistActivity extends AppCompatActivity implements FriendlistC
 
     private List<FriendWithFriendshipId> friends = new ArrayList<>();
 
-    private ServiceFacade serviceFacade;
+    private FriendsService service;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        this.serviceFacade = new ServiceFacade(this);
+        this.service = new FriendsService(this);
 
         setContentView(R.layout.friendlist_layout);
 
@@ -79,12 +80,7 @@ public class FriendlistActivity extends AppCompatActivity implements FriendlistC
     @Override
     protected void onResume() {
         super.onResume();
-        serviceFacade.getFriends(user.getUId());
-    }
-
-    @Override
-    public void setData(Object obj) {
-
+        service.getFriends(user.getUId());
     }
 
     @Override
@@ -100,7 +96,7 @@ public class FriendlistActivity extends AppCompatActivity implements FriendlistC
             Toast.makeText(FriendlistActivity.this, msg,Toast.LENGTH_SHORT).show();
             if (msg.equals("You are friends now")) {
                 friends.clear();
-                serviceFacade.getFriends(user.getUId());
+                service.getFriends(user.getUId());
             }
         }
     }
@@ -108,7 +104,7 @@ public class FriendlistActivity extends AppCompatActivity implements FriendlistC
     @Override
     public void refreshAfterDelete() {
         friends.clear();
-        serviceFacade.getFriends(user.getUId());
+        service.getFriends(user.getUId());
     }
 
     class FABListener implements View.OnClickListener {
@@ -133,7 +129,7 @@ public class FriendlistActivity extends AppCompatActivity implements FriendlistC
                     User mixedUser = new User();
                     mixedUser.setUId(user.getUId());
                     mixedUser.setUsername(input.getText().toString());
-                    serviceFacade.addFriend(mixedUser);
+                    service.addFriend(mixedUser);
                 }
             });
             builder.setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
@@ -163,7 +159,7 @@ public class FriendlistActivity extends AppCompatActivity implements FriendlistC
                 public void onClick(DialogInterface dialog, int which) {
                     Friends friendsToDelete = new Friends();
                     friendsToDelete.setFriendsid(friends.get(position).getFriendshipId());
-                    serviceFacade.deleteFriend(friendsToDelete);
+                    service.deleteFriend(friendsToDelete);
                 }
             });
 

@@ -16,7 +16,7 @@ import de.thm.draw4friends.Model.User;
  * Created by Yannick Bals on 19.02.2018.
  */
 
-@android.arch.persistence.room.Database(entities = {User.class, Friends.class, Challenge.class, Painting.class}, version = 3)
+@android.arch.persistence.room.Database(entities = {User.class, Friends.class, Challenge.class, Painting.class}, version = 4)
 public abstract class Database extends RoomDatabase {
 
     private static Database instance;
@@ -29,7 +29,7 @@ public abstract class Database extends RoomDatabase {
     public static Database getDatabaseInstance(Context context) {
         if (instance == null) {
             instance = Room.databaseBuilder(context.getApplicationContext(), Database.class, "draw_db")
-                    .addMigrations(MIGRATION_1_2, MIGRATION_2_3)
+                    .addMigrations(MIGRATION_1_2, MIGRATION_2_3, MIGRATION_3_4)
                     .build();
         }
         return instance;
@@ -60,6 +60,14 @@ public abstract class Database extends RoomDatabase {
                     "'paint_command_list' TEXT, " +
                     "PRIMARY KEY('id'), " +
                     "FOREIGN KEY('challengeId') REFERENCES challenges('id') ON DELETE CASCADE )";
+            database.execSQL(migrationQuery);
+        }
+    };
+
+    static final Migration MIGRATION_3_4 = new Migration(3,4) {
+        @Override
+        public void migrate(@NonNull SupportSQLiteDatabase database) {
+            String migrationQuery = "ALTER TABLE users ADD COLUMN score INTEGER NOT NULL DEFAULT 0";
             database.execSQL(migrationQuery);
         }
     };

@@ -12,7 +12,6 @@ import de.thm.draw4friends.Database.Database;
 import de.thm.draw4friends.Home.HomeActivity;
 import de.thm.draw4friends.Home.HomeCommunicator;
 import de.thm.draw4friends.Model.Challenge;
-import de.thm.draw4friends.Model.Communicator;
 import de.thm.draw4friends.Model.FriendWithFriendshipId;
 import de.thm.draw4friends.Model.Friends;
 import de.thm.draw4friends.Model.User;
@@ -26,8 +25,8 @@ public class HomeService {
     private HomeCommunicator communicator;
     private Context context;
 
-    public HomeService(Communicator c) {
-        this.communicator = (HomeCommunicator) c;
+    public HomeService(HomeCommunicator c) {
+        this.communicator =  c;
         this.context = (AppCompatActivity) c;
     }
 

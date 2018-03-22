@@ -22,6 +22,7 @@ import android.widget.Toast;
 import de.thm.draw4friends.Model.Challenge;
 import de.thm.draw4friends.Model.Painting;
 import de.thm.draw4friends.R;
+import de.thm.draw4friends.Server.PaintingService;
 import de.thm.draw4friends.Server.ServiceFacade;
 
 import static java.lang.Math.toIntExact;
@@ -46,13 +47,13 @@ public class PaintCanvasActivity extends AppCompatActivity implements PaintCommu
     private SubjectColor currentColor;
 
     private Painting currentPainting;
-    private ServiceFacade serviceFacade;
+    private PaintingService service;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        this.serviceFacade = new ServiceFacade(this);
+        this.service = new PaintingService(this);
 
         setContentView(R.layout.paint_layout);
 
@@ -150,7 +151,12 @@ public class PaintCanvasActivity extends AppCompatActivity implements PaintCommu
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         currentPainting.setPaintCommandListString(customCanvas.getCommandList());
-                        serviceFacade.createChallenge(challenge);
+                        if (challenge.getId() <= 0) {
+                            service.createChallenge(challenge);
+                        } else {
+                            currentPainting.setChallengeId(challenge.getId());
+                            service.setPainting(currentPainting);
+                        }
                     }
                 });
                 builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
@@ -279,11 +285,6 @@ public class PaintCanvasActivity extends AppCompatActivity implements PaintCommu
 
     }
 
-    @Override
-    public void setData(Object obj) {
-
-    }
-
 //    @Override
 //    public void getPainting(Painting painting) {
 //
@@ -293,7 +294,7 @@ public class PaintCanvasActivity extends AppCompatActivity implements PaintCommu
     public void setChallengeIdAndPainting(long id) {
         challenge.setId(toIntExact(id));
         currentPainting.setChallengeId(challenge.getId());
-        serviceFacade.setPainting(currentPainting);
+        service.setPainting(currentPainting);
     }
 //
 //    @Override

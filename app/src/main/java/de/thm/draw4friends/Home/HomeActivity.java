@@ -36,6 +36,7 @@ import de.thm.draw4friends.Model.Friends;
 import de.thm.draw4friends.Model.User;
 import de.thm.draw4friends.Paint.PaintCanvasActivity;
 import de.thm.draw4friends.R;
+import de.thm.draw4friends.Server.HomeService;
 import de.thm.draw4friends.Server.ServiceFacade;
 
 
@@ -52,7 +53,7 @@ public class HomeActivity extends AppCompatActivity implements HomeCommunicator 
     private Button startChallengeButton;
     private ListView challengeListView;
 
-    private ServiceFacade serviceFacade;
+    private HomeService service;
 
     private Challenge newChallenge;
 
@@ -60,7 +61,7 @@ public class HomeActivity extends AppCompatActivity implements HomeCommunicator 
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        serviceFacade = new ServiceFacade(this);
+        service = new HomeService(this);
         setContentView(R.layout.home_layout);
 
         Toolbar toolbar = findViewById(R.id.toolbar);
@@ -73,7 +74,7 @@ public class HomeActivity extends AppCompatActivity implements HomeCommunicator 
         }
 
         //TODO: Remove this, only for testing
-        //serviceFacade.deleteAllChallengesOfUser(user.getUId());
+        //service.deleteAllChallengesOfUser(user.getUId());
 
         this.startChallengeButton = findViewById(R.id.startChallengeButton);
         this.startChallengeButton.setOnClickListener(new ChallengeButtonListener());
@@ -111,7 +112,7 @@ public class HomeActivity extends AppCompatActivity implements HomeCommunicator 
     protected void onResume() {
         super.onResume();
         friends.clear();
-        serviceFacade.getFriendsForChallenges(user.getUId());
+        service.getFriends(user.getUId());
     }
 
     private void logoutDialog() {
@@ -148,7 +149,7 @@ public class HomeActivity extends AppCompatActivity implements HomeCommunicator 
     @Override
     public void setFriends(List<FriendWithFriendshipId> friends) {
         this.friends = friends;
-        serviceFacade.getChallenges(user.getUId());
+        service.getChallenges(user.getUId());
     }
 
     @Override
@@ -157,11 +158,6 @@ public class HomeActivity extends AppCompatActivity implements HomeCommunicator 
         Intent intent = new Intent(HomeActivity.this, PaintCanvasActivity.class);
         intent.putExtra(getString(R.string.challenge_obj), newChallenge);
         startActivity(intent);
-    }
-
-    @Override
-    public void setData(Object obj) {
-
     }
 
     class ChallengeButtonListener implements View.OnClickListener {
@@ -191,7 +187,7 @@ public class HomeActivity extends AppCompatActivity implements HomeCommunicator 
                         newChallenge.setPlayer(user.getUId());
                         newChallenge.setOpponentName(oppnentName);
                         newChallenge.setTurnOff(user.getUId());
-                        serviceFacade.getIdOfOpponent(oppnentName);
+                        service.getIdOfOpponent(oppnentName);
                     }
                 });
                 builder.show();
@@ -215,6 +211,7 @@ public class HomeActivity extends AppCompatActivity implements HomeCommunicator 
             } else {
                 Intent intent = new Intent(HomeActivity.this, GuessActivity.class);
                 intent.putExtra(getString(R.string.challenge_obj), challenge);
+                intent.putExtra(getString(R.string.user_obj), user);
                 startActivity(intent);
             }
         }

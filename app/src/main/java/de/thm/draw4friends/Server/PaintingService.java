@@ -11,7 +11,6 @@ import java.util.List;
 import de.thm.draw4friends.Database.Database;
 import de.thm.draw4friends.Home.HomeCommunicator;
 import de.thm.draw4friends.Model.Challenge;
-import de.thm.draw4friends.Model.Communicator;
 import de.thm.draw4friends.Model.Painting;
 import de.thm.draw4friends.Paint.PaintCommunicator;
 
@@ -24,8 +23,8 @@ public class PaintingService {
     private PaintCommunicator communicator;
     private Context context;
 
-    public PaintingService(Communicator c) {
-        communicator = (PaintCommunicator) c;
+    public PaintingService(PaintCommunicator c) {
+        communicator = c;
         context = (AppCompatActivity) c;
     }
 

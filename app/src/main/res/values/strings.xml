@@ -29,9 +29,18 @@
     <string name="enter_word_hint">Enter the word you want to draw.</string>
     <string name="word">Word</string>
     <string name="guess_activity">Guess drawing</string>
-    <string name="pause">PAUSE</string>
+    <string name="pause"><b>PAUSE</b></string>
+    <string name="guess_hint">Your guess</string>
     <string name="start_timer">Start timer</string>
     <string name="start_timer_msg">Press ok to start a timer and watch the painting. You got 60 seconds to watch the drawing and another 30 seconds afterwards to guess the right answer.</string>
+    <string name="send_guess">Send guess</string>
+    <string name="send_title">Answer</string>
+    <string name="send_answer_msg">Are you sure you want to submit your answer?</string>
+    <string name="answer_right_title">Correct answer</string>
+    <string name="answer_wrong_title">Wrong answer</string>
+    <string name="answer_right_msg">Your answer was correct. You receive </string>
+    <string name="answer_wrong_msg">Unfortunately your answer is not correct.</string>
+    <string name="stats_activity">Scores</string>
 
     <!-- Keys -->
     <string name="login_token">token</string>

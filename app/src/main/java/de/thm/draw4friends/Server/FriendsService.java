@@ -11,7 +11,6 @@ import java.util.List;
 import de.thm.draw4friends.Database.Database;
 import de.thm.draw4friends.Friendlist.FriendlistActivity;
 import de.thm.draw4friends.Friendlist.FriendlistCommunicator;
-import de.thm.draw4friends.Model.Communicator;
 import de.thm.draw4friends.Model.FriendWithFriendshipId;
 import de.thm.draw4friends.Model.Friends;
 import de.thm.draw4friends.Model.User;
@@ -25,8 +24,8 @@ public class FriendsService {
     private FriendlistCommunicator communicator;
     private Context context;
 
-    public FriendsService(Communicator c) {
-        this.communicator = (FriendlistCommunicator) c;
+    public FriendsService(FriendlistCommunicator c) {
+        this.communicator =  c;
         this.context = (AppCompatActivity) c;
     }
 

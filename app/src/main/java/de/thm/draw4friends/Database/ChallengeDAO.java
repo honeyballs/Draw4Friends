@@ -33,7 +33,7 @@ public interface ChallengeDAO {
     @Query("SELECT * FROM challenges WHERE player LIKE :userId OR opponent LIKE :userId")
     public List<Challenge> getChallengesForPlayer(int userId);
 
-    @Query("SELECT username, uId from users INNER JOIN challenges ON users.uId = challenges.opponent WHERE challenges.player = :userId")
+    @Query("SELECT username, uId, score from users INNER JOIN challenges ON users.uId = challenges.opponent WHERE challenges.player = :userId")
     public User getOpponent(int userId);
 
 }
