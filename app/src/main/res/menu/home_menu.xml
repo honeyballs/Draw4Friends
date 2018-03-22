@@ -12,4 +12,8 @@
         android:title="@string/logout"
         app:showAsAction="ifRoom" />
 
+    <item android:id="@+id/stats_menu"
+        android:title="Highscores"
+        app:showAsAction="never" />
+
 </menu>

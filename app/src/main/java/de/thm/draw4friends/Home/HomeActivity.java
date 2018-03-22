@@ -38,6 +38,7 @@ import de.thm.draw4friends.Paint.PaintCanvasActivity;
 import de.thm.draw4friends.R;
 import de.thm.draw4friends.Server.HomeService;
 import de.thm.draw4friends.Server.ServiceFacade;
+import de.thm.draw4friends.Stats.StatsActivity;
 
 
 /**
@@ -103,6 +104,10 @@ public class HomeActivity extends AppCompatActivity implements HomeCommunicator 
             case R.id.logout_menu:
                 logoutDialog();
                 return true;
+            case R.id.stats_menu:
+                Intent statsIntent = new Intent(this, StatsActivity.class);
+                statsIntent.putExtra(getString(R.string.user_obj), user);
+                startActivity(statsIntent);
             default:
                 return super.onOptionsItemSelected(item);
         }
