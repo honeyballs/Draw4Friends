@@ -54,6 +54,7 @@ public class GuessActivity extends AppCompatActivity implements GuessCommunicato
     private int iterationCounter = 0;
     private int timer;
     private long waitPerCommand = 0;
+    private boolean answerCorrect = false;
 
 
     @Override
@@ -114,9 +115,11 @@ public class GuessActivity extends AppCompatActivity implements GuessCommunicato
                         if (guessAnswerEdit.getText().toString() != null && !guessAnswerEdit.getText().toString().equals("")) {
                             AlertDialog.Builder builder = new AlertDialog.Builder(GuessActivity.this);
                             if (guessAnswerEdit.getText().toString().equals(painting.getDescription())) {
+                                answerCorrect = true;
                                 builder.setTitle(getString(R.string.answer_right_title));
                                 builder.setMessage(getString(R.string.answer_right_msg) + " " + calculatePoints() + " Points");
                             } else {
+                                answerCorrect = false;
                                 builder.setTitle(getString(R.string.answer_wrong_title));
                                 builder.setMessage(getString(R.string.answer_wrong_msg));
                             }
@@ -124,8 +127,10 @@ public class GuessActivity extends AppCompatActivity implements GuessCommunicato
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
                                     dialog.dismiss();
-                                    user.setScore(user.getScore() + calculatePoints());
-                                    service.updateScore(user);
+                                    if (answerCorrect) {
+                                        user.setScore(user.getScore() + calculatePoints());
+                                        service.updateScore(user);
+                                    }
                                     currentChallenge.setTurnOff(user.getUId());
                                     handler.removeCallbacks(paintRunnable, timerRunnable);
                                     service.updateChallengeTurn(currentChallenge);
