@@ -20,10 +20,17 @@
         android:layout_gravity="center_horizontal"
         android:id="@+id/ownPointsView"/>
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Your friends' scores"
+        android:layout_margin="20dp"/>
+
     <TableLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="20dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
         android:id="@+id/highscore_table">
 
     </TableLayout>

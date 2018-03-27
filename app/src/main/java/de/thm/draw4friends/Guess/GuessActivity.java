@@ -127,6 +127,7 @@ public class GuessActivity extends AppCompatActivity implements GuessCommunicato
                                     user.setScore(user.getScore() + calculatePoints());
                                     service.updateScore(user);
                                     currentChallenge.setTurnOff(user.getUId());
+                                    handler.removeCallbacks(paintRunnable, timerRunnable);
                                     service.updateChallengeTurn(currentChallenge);
                                     service.deletePainting(painting);
                                     Intent intent = new Intent(GuessActivity.this, StatsActivity.class);

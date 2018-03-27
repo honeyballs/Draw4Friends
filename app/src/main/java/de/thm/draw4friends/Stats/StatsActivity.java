@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.View;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
@@ -67,6 +68,7 @@ public class StatsActivity extends AppCompatActivity implements StatsCommunicato
         if (friends != null && friends.size() > 0) {
             TableLayout.LayoutParams tableParams = new TableLayout.LayoutParams(TableLayout.LayoutParams.MATCH_PARENT, TableLayout.LayoutParams.WRAP_CONTENT);
             TableRow.LayoutParams rowParams = new TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT, TableRow.LayoutParams.WRAP_CONTENT);
+            TableRow.LayoutParams spaceparams = new TableRow.LayoutParams(0, 0, 1);
             for (User friend : friends) {
                 TableRow row = new TableRow(this);
                 row.setLayoutParams(tableParams);
@@ -75,8 +77,11 @@ public class StatsActivity extends AppCompatActivity implements StatsCommunicato
                 nameView.setText(friend.getUsername());
                 TextView scoreView = new TextView(this);
                 scoreView.setLayoutParams(rowParams);
-                scoreView.setText(""+user.getScore());
+                scoreView.setText(""+friend.getScore());
                 row.addView(nameView);
+                View space = new View(this);
+                space.setLayoutParams(spaceparams);
+                row.addView(space);
                 row.addView(scoreView);
                 highscoreTable.addView(row);
 
