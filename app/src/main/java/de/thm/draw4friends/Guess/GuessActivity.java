@@ -45,12 +45,14 @@ public class GuessActivity extends AppCompatActivity implements GuessCommunicato
     private GuessService service;
 
     private CanvasView canvasView;
-    private TextView pauseButton;
+    private TextView pauseButton, timerView;
     private EditText guessAnswerEdit;
 
     private Handler handler;
     private Runnable paintRunnable;
+    private Runnable timerRunnable;
     private int iterationCounter = 0;
+    private int timer;
     private long waitPerCommand = 0;
 
 
@@ -65,6 +67,7 @@ public class GuessActivity extends AppCompatActivity implements GuessCommunicato
         this.canvasView = findViewById(R.id.signature_canvas);
         this.pauseButton = findViewById(R.id.pauseButton);
         this.guessAnswerEdit = findViewById(R.id.answerGuessEdit);
+        this.timerView = findViewById(R.id.timerView);
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -175,7 +178,7 @@ public class GuessActivity extends AppCompatActivity implements GuessCommunicato
     }
 
     private int calculatePoints() {
-        return 534;
+        return timer * 100;
     }
 
     private void startTimer() {
@@ -187,62 +190,62 @@ public class GuessActivity extends AppCompatActivity implements GuessCommunicato
         canvasView.clearCommands();
         if (commandList != null && commandList.size() > 0) {
 
-            /*for (PaintCommand command : commandList) {
-                Log.e("Command: ", command.toString());
-                canvasView.addCommand(commandList.get(iterationCounter));
-                canvasView.repaintCommandList();
-            }*/
-            //canvasView.addCommands(commandList);
-            //canvasView.repaintCommandList();
-/*
-            waitPerCommand = 60000/commandList.size();
+            timer = commandList.size() * 3 + 30;
+            timerView.setText(Integer.toString(timer));
             paintRunnable = new Runnable() {
                 @Override
                 public void run() {
                     try {
                         addCommandAndPaint();
-                        iterationCounter += 1;
+                    } catch (Exception e) {
+                        e.printStackTrace();
                     } finally {
-                        handler.postDelayed(paintRunnable, waitPerCommand);
+                        handler.postDelayed(paintRunnable, 3000);
                     }
                 }
             };
-            paintRunnable.run();*/
+            timerRunnable = new Runnable() {
+                @Override
+                public void run() {
+                    try {
+                        timer--;
+                        timerView.setText(Integer.toString(timer));
+                    } finally {
+                        if (timer > 0) {
+                            handler.postDelayed(timerRunnable, 1000);
+                        } else {
+                            handler.removeCallbacks(timerRunnable);
+                        }
+                    }
+                }
+            };
+            handler.post(timerRunnable);
+            handler.post(paintRunnable);
         }
     }
 
     private void pauseTimer() {
-        handler.removeCallbacks(paintRunnable);
+        handler.removeCallbacks(paintRunnable, timerRunnable);
     }
 
     private void continueTimer() {
         handler = new Handler();
-        paintRunnable = new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    addCommandAndPaint();
-                    handler.postDelayed(paintRunnable, waitPerCommand);
-                } finally {
-                    Log.e("Finally", "");
+        handler.postDelayed(paintRunnable, 3000);
+        handler.postDelayed(timerRunnable, 1000);
 
-                }
-            }
-        };
-        paintRunnable.run();
     }
 
 
     private void addCommandAndPaint() {
         if (iterationCounter < commandList.size()) {
-            Log.e("Command: ", commandList.get(iterationCounter).toString());
+            /*Log.e("Command: ", commandList.get(iterationCounter).toString());
             Log.e("iteration", ""+iterationCounter);
             canvasView.addCommand(commandList.get(iterationCounter));
-            canvasView.repaintCommandList();
+            canvasView.repaintCommandList();*/
+            Log.e("Iteration nr: ", ""+iterationCounter);
             iterationCounter++;
         } else {
             handler.removeCallbacks(paintRunnable);
-            //TODO 30 second timer
         }
     }
 

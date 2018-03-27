@@ -32,8 +32,9 @@
             android:layout_gravity="center_vertical"/>
 
         <EditText
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_weight="1"
             android:id="@+id/answerGuessEdit"
             android:hint="@string/guess_hint"
             android:layout_marginRight="20dp"
@@ -45,6 +46,18 @@
             android:textColorHint="#fff"
             android:backgroundTint="#fff"
             />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="#fff"
+            android:text="00"
+            android:clickable="true"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            android:layout_margin="20dp"
+            android:id="@+id/timerView"
+            android:layout_gravity="center_vertical"/>
 
     </LinearLayout>
 
