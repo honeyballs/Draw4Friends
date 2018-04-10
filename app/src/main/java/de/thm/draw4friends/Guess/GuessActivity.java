@@ -2,6 +2,8 @@ package de.thm.draw4friends.Guess;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Paint;
 import android.os.Bundle;
 import android.os.Handler;
@@ -194,6 +196,9 @@ public class GuessActivity extends AppCompatActivity implements GuessCommunicato
         commandList = painting.getPaintCommandLists();
         canvasView.clearCanvas();
         canvasView.clearCommands();
+        byte[] imageBytes = painting.getPainting();
+        Bitmap bitmap = BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.length);
+        canvasView.setBitmap(bitmap);
         if (commandList != null && commandList.size() > 0) {
 
             timer = commandList.size() * 3 + 30;

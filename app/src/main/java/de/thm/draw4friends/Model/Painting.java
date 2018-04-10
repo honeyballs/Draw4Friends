@@ -36,6 +36,8 @@ public class Painting implements Parcelable{
 
     private int challengeId;
     private String description;
+    @ColumnInfo(typeAffinity = ColumnInfo.BLOB, name = "painting")
+    private byte[] painting;
 
     @ColumnInfo(name = "paint_command_list")
     private String paintCommandListString;
@@ -47,6 +49,8 @@ public class Painting implements Parcelable{
         challengeId = in.readInt();
         description = in.readString();
         paintCommandListString = in.readString();
+        painting = new byte[in.readInt()];
+        in.readByteArray(painting);
     }
 
     public int getId() {
@@ -71,6 +75,14 @@ public class Painting implements Parcelable{
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public byte[] getPainting() {
+        return painting;
+    }
+
+    public void setPainting(byte[] painting) {
+        this.painting = painting;
     }
 
     public String getPaintCommandListString() {
@@ -116,6 +128,8 @@ public class Painting implements Parcelable{
         dest.writeInt(challengeId);
         dest.writeString(description);
         dest.writeString(paintCommandListString);
+        dest.writeInt(painting.length);
+        dest.writeByteArray(painting);
     }
 
     public static final Parcelable.Creator<Painting> CREATOR = new Parcelable.Creator<Painting>() {

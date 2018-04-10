@@ -1,6 +1,7 @@
 package de.thm.draw4friends.Paint;
 
 import android.content.DialogInterface;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
@@ -18,6 +19,8 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import java.io.ByteArrayOutputStream;
 
 import de.thm.draw4friends.Model.Challenge;
 import de.thm.draw4friends.Model.Painting;
@@ -151,6 +154,13 @@ public class PaintCanvasActivity extends AppCompatActivity implements PaintCommu
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         currentPainting.setPaintCommandListString(customCanvas.getCommandList());
+                        //Convert image to byte[]
+                        Bitmap image = customCanvas.getBitmap();
+                        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+                        image.compress(Bitmap.CompressFormat.PNG, 100, stream);
+                        byte[] byteArray = stream.toByteArray();
+                        image.recycle();
+                        currentPainting.setPainting(byteArray);
                         if (challenge.getId() <= 0) {
                             service.createChallenge(challenge);
                         } else {

@@ -147,6 +147,15 @@ public class CanvasView extends View {
         }
     }
 
+    public Bitmap getBitmap() {
+        return mBitmap;
+    }
+
+    public void setBitmap(Bitmap bmp) {
+        mBitmap = bmp;
+        mCanvas.drawBitmap(bmp, 0, 0, null);
+    }
+
     public void addCommands(List<PaintCommand> commands) {
         this.commandList.addAll(commands);
     }
@@ -158,4 +167,5 @@ public class CanvasView extends View {
     public void clearCommands() {
         this.commandList.clear();
     }
+
 }
